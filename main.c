@@ -23,18 +23,27 @@ int main()
         return -1;
     
     al_init_primitives_addon();
+    //Declarando mouse e teclado
     al_install_keyboard();
+    al_install_mouse();
 
     queue = al_create_event_queue();
 
+    //Deixando a fila atenta aos eventos do teclado e mouse
     al_register_event_source(queue, al_get_keyboard_event_source());
+    al_register_event_source(queue, al_get_mouse_event_source());
 
     while(!done)
     {
         ALLEGRO_EVENT ev;
         al_wait_for_event(queue, &ev);
 
-        if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
+        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+        {
+            done = true;
+        }
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
         {
             switch (ev.keyboard.keycode)
             {
@@ -59,8 +68,8 @@ int main()
         }
 
         al_draw_filled_circle(pos_x, pos_y, 50, color);
-        al_flip_display();
-        al_clear_to_color(al_map_rgb(0,0,0));
+        al_flip_display(); //Buffer
+        al_clear_to_color(al_map_rgb(0,0,0)); //Limpa o plano de fundo para preto
     }
     al_destroy_display(display);
 }
