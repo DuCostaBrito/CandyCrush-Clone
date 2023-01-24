@@ -1,5 +1,6 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_image.h>
 #include <stdio.h>
 #include <time.h>
 #include "candy.h"
@@ -7,6 +8,23 @@
 #define FPS 60
 #define KEY_SEEN 1
 #define KEY_RELEASED 2
+
+ALLEGRO_BITMAP* createImg(char* name, int width, int height, ALLEGRO_DISPLAY *display){
+    ALLEGRO_BITMAP *img, *bmp;
+
+    bmp = al_create_bitmap(width, height);
+    al_set_target_bitmap(bmp);
+
+
+    if(name){
+        img = al_load_bitmap(name);
+        al_draw_bitmap(img, 0, 0, 0);
+    }
+
+    al_set_target_bitmap(al_get_backbuffer(display));
+
+    return bmp;
+}
 
 void must_init(bool test, const char *description)
 {
@@ -66,6 +84,7 @@ int main()
         return -1;
 
     al_init_primitives_addon();
+    al_init_image_addon();
     // Declarando mouse e teclado
     al_install_keyboard();
     al_install_mouse();
@@ -77,6 +96,9 @@ int main()
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_mouse_event_source());
     al_register_event_source(queue, al_get_timer_event_source(timer));
+
+
+    ALLEGRO_BITMAP  *background = al_load_bitmap("resources/images/background.png");
 
     ALLEGRO_EVENT ev;
     al_start_timer(timer);
@@ -143,16 +165,18 @@ int main()
         }
         if (done)
             break;
-
+        
         if (redraw && al_is_event_queue_empty(queue))
         {
+            
             // al_draw_filled_rounded_rectangle(50, 150, width - 50, height - 50, 40, 40, al_map_rgba(0, 0, 0, 100));
             drawBoard(board);
             al_flip_display();                      // Buffer
-            al_clear_to_color(al_map_rgb(0, 0, 0)); // Limpa o plano de fundo para preto
+            al_draw_bitmap(background, 0, 0, 0);
             redraw = false;
         }
     }
+    al_destroy_bitmap(background);
     al_destroy_display(display);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
