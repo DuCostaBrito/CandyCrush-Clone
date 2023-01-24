@@ -37,6 +37,7 @@ typedef struct CANDY
     int x, y;
     int xBoardPos, yBoardPos;
     CANDY_TYPE type;
+    bool rightPosition;
     bool match;
 } CANDY;
 
@@ -48,5 +49,6 @@ typedef struct BOARD
 
 BOARD *createBoard();
 void drawBoard(BOARD *board);
+void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY);
 
 #endif

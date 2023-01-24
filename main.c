@@ -31,12 +31,19 @@ int main()
     BOARD *board = createBoard();
     int width = 570;
     int height = 1024;
+    int i, j;
 
     bool done = false;
     bool redraw = true;
 
     unsigned char key[ALLEGRO_KEY_MAX];
     memset(key, 0, sizeof(key));
+
+    int xMouse, xMouseOrigin, xMouseEnd;
+    int yMouse, yMouseOrigin, yMouseEnd;
+    bool mousePressed = false;
+    int srcIndexCandyX, srcIndexCandyY;
+    int destIndexCandyX, destIndexCandyY;
 
     ALLEGRO_DISPLAY *display;
     ALLEGRO_EVENT_QUEUE *queue;
@@ -70,7 +77,7 @@ int main()
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_mouse_event_source());
     al_register_event_source(queue, al_get_timer_event_source(timer));
-    
+
     ALLEGRO_EVENT ev;
     al_start_timer(timer);
 
@@ -84,6 +91,28 @@ int main()
                 done = true;
             for (int i = 0; i < ALLEGRO_KEY_MAX; i++)
                 key[i] &= KEY_SEEN;
+            if (mousePressed)
+            {
+                for (i = 0; i < BOARD_ROW; i++)
+                {
+                    for (j = 0; j < BOARD_COL; j++)
+                    {
+                        if ((within(board->grid[i][j]->x + 35, board->grid[i][j]->x - 35, xMouseOrigin)) && (within(board->grid[i][j]->y + 35, board->grid[i][j]->y - 35, yMouseOrigin)))
+                        {
+                            srcIndexCandyX = i;
+                            srcIndexCandyY = j;
+                        }
+                        else if ((within(board->grid[i][j]->x + 35, board->grid[i][j]->x - 35, xMouseEnd)) && (within(board->grid[i][j]->y + 35, board->grid[i][j]->y - 35, yMouseEnd)))
+                        {
+                            destIndexCandyX = i;
+                            destIndexCandyY = j;
+                        }
+                    }
+                }
+                changeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY);
+                mousePressed = false;
+            }
+
             redraw = true;
             break;
         case ALLEGRO_EVENT_KEY_DOWN:
@@ -91,6 +120,20 @@ int main()
             break;
         case ALLEGRO_EVENT_KEY_UP:
             key[ev.keyboard.keycode] &= KEY_RELEASED;
+            break;
+        case ALLEGRO_EVENT_MOUSE_AXES:
+            xMouse = ev.mouse.x;
+            yMouse = ev.mouse.y;
+            break;
+        case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+            xMouseOrigin = ev.mouse.x;
+            yMouseOrigin = ev.mouse.y;
+            mousePressed = false;
+            break;
+        case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+            mousePressed = true;
+            xMouseEnd = ev.mouse.x;
+            yMouseEnd = ev.mouse.y;
             break;
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
             done = true;
@@ -101,10 +144,10 @@ int main()
 
         if (redraw && al_is_event_queue_empty(queue))
         {
-            al_draw_filled_rounded_rectangle(50, 150, width - 50, height - 50, 40, 40, al_map_rgba(0, 0, 0, 100));
+            // al_draw_filled_rounded_rectangle(50, 150, width - 50, height - 50, 40, 40, al_map_rgba(0, 0, 0, 100));
             drawBoard(board);
-            al_flip_display();                            // Buffer
-            al_clear_to_color(al_map_rgb(150, 150, 150)); // Limpa o plano de fundo para preto
+            al_flip_display();                      // Buffer
+            al_clear_to_color(al_map_rgb(0, 0, 0)); // Limpa o plano de fundo para preto
             redraw = false;
         }
     }

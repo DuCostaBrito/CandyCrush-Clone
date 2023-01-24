@@ -12,6 +12,7 @@ CANDY *createCandy()
         return NULL;
     enum CANDY_TYPE ct = (aleat(0, CANDY_TYPE_N));
     candy->match = false;
+    candy->rightPosition = false;
     candy->type = ct;
     candy->x = 0;
     candy->y = 0;
@@ -49,27 +50,27 @@ void drawBoard(BOARD *board)
         {
             switch (board->grid[i][j]->type)
             {
-            case 0:
+            case CT_RED:
                 al_draw_filled_circle(board->grid[i][j]->x, board->grid[i][j]->y, 35, RED);
                 break;
-            case 1:
+            case CT_PURPLE:
                 al_draw_filled_circle(board->grid[i][j]->x, board->grid[i][j]->y, 35, PURPLE);
                 break;
-            case 2:
+            case CT_GREEN:
                 al_draw_filled_circle(board->grid[i][j]->x, board->grid[i][j]->y, 35, GREEN);
-            case 3:
+            case CT_ORANGE:
                 al_draw_filled_circle(board->grid[i][j]->x, board->grid[i][j]->y, 35, ORANGE);
                 break;
-            case 4:
+            case CT_BLUE:
                 al_draw_filled_circle(board->grid[i][j]->x, board->grid[i][j]->y, 35, BLUE);
                 break;
-            case 5:
+            case CT_BROWN:
                 al_draw_filled_circle(board->grid[i][j]->x, board->grid[i][j]->y, 35, BROWN);
                 break;
-            case 6:
+            case CT_GRAY:
                 al_draw_filled_circle(board->grid[i][j]->x, board->grid[i][j]->y, 35, GRAY);
                 break;
-            case 7:
+            case CT_BLACK:
                 al_draw_filled_circle(board->grid[i][j]->x, board->grid[i][j]->y, 35, BLACK);
                 break;
 
@@ -79,4 +80,12 @@ void drawBoard(BOARD *board)
             al_draw_circle(board->grid[i][j]->x, board->grid[i][j]->y, 35, al_map_rgb(255, 255, 255), 2);
         }
     }
+}
+
+void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY)
+{
+    enum CANDY_TYPE aux;
+    aux = board->grid[srcIndexX][srcIndexY]->type;
+    board->grid[srcIndexX][srcIndexY]->type = board->grid[destIndexX][destIndexY]->type;
+    board->grid[destIndexX][destIndexY]->type = aux;
 }
