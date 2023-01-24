@@ -1,6 +1,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <stdio.h>
+#include <time.h>
 #include "candy.h"
 
 #define BOARD_SIZE 8
@@ -24,10 +25,11 @@ bool within(int top, int bottom, int x)
 
 int main()
 {
+    srand(time(0));
     CANDY board[8][8];
     initializeBoard(board, 8);
-    int width = 640;
-    int height = 800;
+    int width = 540;
+    int height = 960;
 
     bool done = false;
     int pos_x = width / 2;
@@ -40,6 +42,8 @@ int main()
 
     if (!al_init())
         return -1;
+    al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
+    al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
 
     display = al_create_display(width, height);
 
@@ -75,7 +79,7 @@ int main()
         {
         }
 
-        al_draw_filled_rounded_rectangle(50, 50, 590, 750, 20, 20, al_map_rgba(0, 0, 0, 100));
+        al_draw_filled_rounded_rectangle(30, 80, width - 30, height - 60, 20, 20, al_map_rgba(0, 0, 0, 100));
         for (int i = 0; i < 8; i++)
         {
             for (int j = 0; j < 8; j++)
@@ -110,7 +114,8 @@ int main()
                     default:
                         break;
                 }
-                al_draw_filled_circle(board[i][j].x, board[i][j].y, 20, color);
+                al_draw_filled_circle(board[i][j].x, board[i][j].y, 24, color);
+                al_draw_circle(board[i][j].x, board[i][j].y, 24, al_map_rgb(255, 255, 255), 2);
             }
         }
         al_flip_display();                            // Buffer

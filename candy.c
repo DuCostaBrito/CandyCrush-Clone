@@ -16,9 +16,8 @@ void initializeBoard(CANDY board[8][8], int size) {
             board[i][j].type = ct;
             board[i][j].xBoardPos = i;
             board[i][j].yBoardPos = j;
-            board[i][j].x = 56 + ((j + 1) * 20) + ((j + 1) * 40);
-            board[i][j].y = 55 + ((i + 1) * 35) + ((i + 1) * 40);
-            board[i][j].seq = false;
+            board[i][j].x = 40 + ((j + 1) * 20) + (j * 40);
+            board[i][j].y = 80 + ((i + 1) * 40) + (i * 40);
         }
     }
     return;

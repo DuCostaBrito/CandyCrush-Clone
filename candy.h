@@ -23,7 +23,6 @@ typedef struct CANDY
     int x, y;
     int xBoardPos, yBoardPos;
     CANDY_TYPE type;
-    bool seq;
 } CANDY;
 
 void initializeBoard(CANDY board[8][8], int size);
