@@ -44,36 +44,36 @@ BOARD *createBoard()
 
 void drawCandy(CANDY *candy, int x, int y)
 {
-switch (candy->type)
-            {
-            case CT_RED:
-                al_draw_filled_circle(x, y, 35, RED);
-                break;
-            case CT_PURPLE:
-                al_draw_filled_circle(x, y, 35, PURPLE);
-                break;
-            case CT_GREEN:
-                al_draw_filled_circle(x, y, 35, GREEN);
-            case CT_ORANGE:
-                al_draw_filled_circle(x, y, 35, ORANGE);
-                break;
-            case CT_BLUE:
-                al_draw_filled_circle(x, y, 35, BLUE);
-                break;
-            case CT_BROWN:
-                al_draw_filled_circle(x, y, 35, BROWN);
-                break;
-            case CT_GRAY:
-                al_draw_filled_circle(x, y, 35, GRAY);
-                break;
-            case CT_BLACK:
-                al_draw_filled_circle(x, y, 35, BLACK);
-                break;
+    switch (candy->type)
+    {
+    case CT_RED:
+        al_draw_filled_circle(x, y, 35, RED);
+        break;
+    case CT_PURPLE:
+        al_draw_filled_circle(x, y, 35, PURPLE);
+        break;
+    case CT_GREEN:
+        al_draw_filled_circle(x, y, 35, GREEN);
+    case CT_ORANGE:
+        al_draw_filled_circle(x, y, 35, ORANGE);
+        break;
+    case CT_BLUE:
+        al_draw_filled_circle(x, y, 35, BLUE);
+        break;
+    case CT_BROWN:
+        al_draw_filled_circle(x, y, 35, BROWN);
+        break;
+    case CT_GRAY:
+        al_draw_filled_circle(x, y, 35, GRAY);
+        break;
+    case CT_BLACK:
+        al_draw_filled_circle(x, y, 35, BLACK);
+        break;
 
-            default:
-                break;
-            }
-            al_draw_circle(x, y, 35, al_map_rgb(255, 255, 255), 2);
+    default:
+        break;
+    }
+    al_draw_circle(x, y, 35, al_map_rgb(255, 255, 255), 2);
 }
 
 void drawBoard(BOARD *board)
@@ -94,14 +94,57 @@ void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, in
     enum CANDY_TYPE aux = board->grid[srcIndexX][srcIndexY]->type;
     board->grid[srcIndexX][srcIndexY]->moving = true;
     board->grid[destIndexX][destIndexY]->moving = true;
-    while(board->grid[srcIndexX][srcIndexY]->x + count < board->grid[destIndexX][destIndexY]->x)
+    if (srcIndexY < destIndexY)
     {
-        al_clear_to_color(al_map_rgb(0,0,0));
-        drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x + count, board->grid[srcIndexX][srcIndexY]->y);
-        drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x - count, board->grid[destIndexX][destIndexY]->y);
-        drawBoard(board);
-        al_flip_display();
-        count+=3;
+        //right
+        while (board->grid[srcIndexX][srcIndexY]->x + count < board->grid[destIndexX][destIndexY]->x)
+        {
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+            drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x + count, board->grid[srcIndexX][srcIndexY]->y);
+            drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x - count, board->grid[destIndexX][destIndexY]->y);
+            drawBoard(board);
+            al_flip_display();
+            count += 4;
+        }
+    }
+    else if (srcIndexX < destIndexX)
+    {
+        //down
+        while (board->grid[srcIndexX][srcIndexY]->y + count < board->grid[destIndexX][destIndexY]->y)
+        {
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+            drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x, board->grid[srcIndexX][srcIndexY]->y + count);
+            drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x, board->grid[destIndexX][destIndexY]->y - count);
+            drawBoard(board);
+            al_flip_display();
+            count += 4;
+        }
+    }
+    else if (srcIndexY > destIndexY)
+    {
+        //left
+        while (board->grid[srcIndexX][srcIndexY]->x - count > board->grid[destIndexX][destIndexY]->x)
+        {
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+            drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x - count, board->grid[srcIndexX][srcIndexY]->y);
+            drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x + count, board->grid[destIndexX][destIndexY]->y);
+            drawBoard(board);
+            al_flip_display();
+            count += 4;
+        }
+    }
+    else if (srcIndexX > destIndexX)
+    {
+        //up
+        while (board->grid[srcIndexX][srcIndexY]->y - count > board->grid[destIndexX][destIndexY]->y)
+        {
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+            drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x, board->grid[srcIndexX][srcIndexY]->y - count);
+            drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x, board->grid[destIndexX][destIndexY]->y + count);
+            drawBoard(board);
+            al_flip_display();
+            count += 4;
+        }
     }
     board->grid[srcIndexX][srcIndexY]->moving = false;
     board->grid[destIndexX][destIndexY]->moving = false;

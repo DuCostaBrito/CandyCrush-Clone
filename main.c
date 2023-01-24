@@ -109,10 +109,12 @@ int main()
                         }
                     }
                 }
-                changeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY);
+                //testando se foi tentado mexer com uma peca adjacente (nao diagonal) 
+                if ((((destIndexCandyX == srcIndexCandyX + 1) || (destIndexCandyX == srcIndexCandyX - 1)) && (destIndexCandyY == srcIndexCandyY)) ||
+                (((destIndexCandyY == srcIndexCandyY + 1) || (destIndexCandyY == srcIndexCandyY - 1)) && (destIndexCandyX == srcIndexCandyX)))
+                    changeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY);
                 mousePressed = false;
             }
-
             redraw = true;
             break;
         case ALLEGRO_EVENT_KEY_DOWN:
@@ -131,9 +133,9 @@ int main()
             mousePressed = false;
             break;
         case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
-            mousePressed = true;
             xMouseEnd = ev.mouse.x;
             yMouseEnd = ev.mouse.y;
+            mousePressed = true;
             break;
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
             done = true;
