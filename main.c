@@ -4,7 +4,9 @@
 #include <time.h>
 #include "candy.h"
 
-#define BOARD_SIZE 8
+#define FPS 60
+#define KEY_SEEN 1
+#define KEY_RELEASED 2
 
 void must_init(bool test, const char *description)
 {
@@ -31,11 +33,14 @@ int main()
     int height = 1024;
 
     bool done = false;
-    int pos_x = width / 2;
-    int pos_y = height / 2;
+    bool redraw = true;
+
+    unsigned char key[ALLEGRO_KEY_MAX];
+    memset(key, 0, sizeof(key));
 
     ALLEGRO_DISPLAY *display;
     ALLEGRO_EVENT_QUEUE *queue;
+    ALLEGRO_TIMER *timer;
 
     ALLEGRO_COLOR color;
 
@@ -49,6 +54,10 @@ int main()
     if (!display)
         return -1;
 
+    timer = al_create_timer(1.0 / FPS);
+    if (!timer)
+        return -1;
+
     al_init_primitives_addon();
     // Declarando mouse e teclado
     al_install_keyboard();
@@ -57,31 +66,50 @@ int main()
     queue = al_create_event_queue();
 
     // Deixando a fila atenta aos eventos do teclado e mouse
+    al_register_event_source(queue, al_get_display_event_source(display));
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_mouse_event_source());
+    al_register_event_source(queue, al_get_timer_event_source(timer));
+    
+    ALLEGRO_EVENT ev;
+    al_start_timer(timer);
 
-    while (!done)
+    while (1)
     {
-        ALLEGRO_EVENT ev;
         al_wait_for_event(queue, &ev);
-
-        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+        switch (ev.type)
         {
-            done = true;
-        }
-        else if (ev.type == ALLEGRO_EVENT_KEY_UP)
-        {
-            if (ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
+        case ALLEGRO_EVENT_TIMER:
+            if (key[ALLEGRO_KEY_ESCAPE])
                 done = true;
+            for (int i = 0; i < ALLEGRO_KEY_MAX; i++)
+                key[i] &= KEY_SEEN;
+            redraw = true;
+            break;
+        case ALLEGRO_EVENT_KEY_DOWN:
+            key[ev.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
+            break;
+        case ALLEGRO_EVENT_KEY_UP:
+            key[ev.keyboard.keycode] &= KEY_RELEASED;
+            break;
+        case ALLEGRO_EVENT_DISPLAY_CLOSE:
+            done = true;
+            break;
         }
-        else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-        {
-        }
+        if (done)
+            break;
 
-        al_draw_filled_rounded_rectangle(50, 150, width - 50, height - 50, 40, 40, al_map_rgba(0, 0, 0, 100));
-        drawBoard(board);
-        al_flip_display();                            // Buffer
-        al_clear_to_color(al_map_rgb(150, 150, 150)); // Limpa o plano de fundo para preto
+        if (redraw && al_is_event_queue_empty(queue))
+        {
+            al_draw_filled_rounded_rectangle(50, 150, width - 50, height - 50, 40, 40, al_map_rgba(0, 0, 0, 100));
+            drawBoard(board);
+            al_flip_display();                            // Buffer
+            al_clear_to_color(al_map_rgb(150, 150, 150)); // Limpa o plano de fundo para preto
+            redraw = false;
+        }
     }
     al_destroy_display(display);
+    al_destroy_timer(timer);
+    al_destroy_event_queue(queue);
+    return 0;
 }
