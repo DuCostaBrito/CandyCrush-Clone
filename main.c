@@ -26,10 +26,10 @@ bool within(int top, int bottom, int x)
 int main()
 {
     srand(time(0));
-    CANDY board[8][8];
-    initializeBoard(board, 8);
-    int width = 540;
-    int height = 960;
+    CANDY board[9][5];
+    initializeBoard(board);
+    int width = 570;
+    int height = 1024;
 
     bool done = false;
     int pos_x = width / 2;
@@ -37,6 +37,23 @@ int main()
 
     ALLEGRO_DISPLAY *display;
     ALLEGRO_EVENT_QUEUE *queue;
+
+    ALLEGRO_COLOR red_aux = al_map_rgb(220, 20, 60);
+    ALLEGRO_COLOR *red = &red_aux;
+    ALLEGRO_COLOR purple_aux = al_map_rgb(238, 130, 238);
+    ALLEGRO_COLOR *purple = &purple_aux;
+    ALLEGRO_COLOR green_aux = al_map_rgb(144, 238, 144);
+    ALLEGRO_COLOR *green = &green_aux;
+    ALLEGRO_COLOR orange_aux = al_map_rgb(255, 222, 173);
+    ALLEGRO_COLOR *orange = &orange_aux;
+    ALLEGRO_COLOR blue_aux = al_map_rgb(135, 206, 250);
+    ALLEGRO_COLOR *blue = &blue_aux;
+    ALLEGRO_COLOR brown_aux = al_map_rgb(139, 87, 66);
+    ALLEGRO_COLOR *brown = &brown_aux;
+    ALLEGRO_COLOR gray_aux = al_map_rgb(211, 211, 211);
+    ALLEGRO_COLOR *gray = &gray_aux;
+    ALLEGRO_COLOR black_aux = al_map_rgb(0, 0, 0);
+    ALLEGRO_COLOR *black = &black_aux;
 
     ALLEGRO_COLOR color;
 
@@ -79,43 +96,43 @@ int main()
         {
         }
 
-        al_draw_filled_rounded_rectangle(30, 80, width - 30, height - 60, 20, 20, al_map_rgba(0, 0, 0, 100));
-        for (int i = 0; i < 8; i++)
+        al_draw_filled_rounded_rectangle(50, 150, width - 50, height - 50, 40, 40, al_map_rgba(0, 0, 0, 100));
+        for (int i = 0; i < 9; i++)
         {
-            for (int j = 0; j < 8; j++)
+            for (int j = 0; j < 5; j++)
             {
                 switch (board[i][j].type)
                 {
                     case 0:
-                        color = al_map_rgb(220, 20, 60); 
+                        color = *red; 
                         break;
                     case 1:
-                        color = al_map_rgb(238, 130, 238);
+                        color = *purple;
                         break;
                     case 2:
-                        color = al_map_rgb(144, 238, 144);
+                        color = *green;
                         break;
                     case 3:
-                        color = al_map_rgb(255, 222, 173);
+                        color = *orange;
                         break;
                     case 4:
-                        color = al_map_rgb(135, 206, 250);
+                        color = *blue;
                         break;
                     case 5:
-                        color = al_map_rgb(139, 87, 66);
+                        color = *brown;
                     break;
                     case 6:
-                        color = al_map_rgb(211, 211, 211);
+                        color = *gray;
                         break;
                     case 7:
-                        color = al_map_rgb(0, 0, 0);
+                        color = *black;
                         break;
 
                     default:
                         break;
                 }
-                al_draw_filled_circle(board[i][j].x, board[i][j].y, 24, color);
-                al_draw_circle(board[i][j].x, board[i][j].y, 24, al_map_rgb(255, 255, 255), 2);
+                al_draw_filled_circle(board[i][j].x, board[i][j].y, 35, color);
+                al_draw_circle(board[i][j].x, board[i][j].y, 35, al_map_rgb(255, 255, 255), 2);
             }
         }
         al_flip_display();                            // Buffer
