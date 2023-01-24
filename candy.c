@@ -35,60 +35,59 @@ BOARD *createBoard()
             board->grid[i][j] = createCandy();
             board->grid[i][j]->xBoardPos = i;
             board->grid[i][j]->yBoardPos = j;
-            board->grid[i][j]->x = 50 + 24 + ((j + 1) * 35) + (j * 54);
-            board->grid[i][j]->y = 150 + 45 + ((i + 1) * 35) + (i * 50);
+            board->grid[i][j]->x = 50 + 24 + (j * 90);
+            board->grid[i][j]->y = 150 + 45 + (i * 85);
         }
     }
     return board;
 }
 
-void drawCandy(CANDY *candy, int x, int y)
+void drawCandy(CANDY *candy, int x, int y, ALLEGRO_BITMAP *sprites[8])
 {
     switch (candy->type)
     {
     case CT_RED:
-        al_draw_filled_circle(x, y, 35, RED);
+        al_draw_bitmap(sprites[0], x, y, 0);
         break;
     case CT_PURPLE:
-        al_draw_filled_circle(x, y, 35, PURPLE);
+        al_draw_bitmap(sprites[1], x, y, 0);
         break;
     case CT_GREEN:
-        al_draw_filled_circle(x, y, 35, GREEN);
+        al_draw_bitmap(sprites[2], x, y, 0);
     case CT_ORANGE:
-        al_draw_filled_circle(x, y, 35, ORANGE);
+        al_draw_bitmap(sprites[3], x, y, 0);
         break;
     case CT_BLUE:
-        al_draw_filled_circle(x, y, 35, BLUE);
+        al_draw_bitmap(sprites[4], x, y, 0);
         break;
     case CT_BROWN:
-        al_draw_filled_circle(x, y, 35, BROWN);
+        al_draw_bitmap(sprites[5], x, y, 0);
         break;
     case CT_GRAY:
-        al_draw_filled_circle(x, y, 35, GRAY);
+        al_draw_bitmap(sprites[6], x, y, 0);
         break;
     case CT_BLACK:
-        al_draw_filled_circle(x, y, 35, BLACK);
+        al_draw_bitmap(sprites[7], x, y, 0);
         break;
 
     default:
         break;
     }
-    al_draw_circle(x, y, 35, al_map_rgb(255, 255, 255), 2);
 }
 
-void drawBoard(BOARD *board)
+void drawBoard(BOARD *board, ALLEGRO_BITMAP *sprites[8])
 {
     for (int i = 0; i < BOARD_ROW; i++)
     {
         for (int j = 0; j < BOARD_COL; j++)
         {
             if (!board->grid[i][j]->moving)
-                drawCandy(board->grid[i][j], board->grid[i][j]->x, board->grid[i][j]->y);
+                drawCandy(board->grid[i][j], board->grid[i][j]->x, board->grid[i][j]->y, sprites);
         }
     }
 }
 
-void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY)
+void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8])
 {
     int count = 2;
     enum CANDY_TYPE aux = board->grid[srcIndexX][srcIndexY]->type;
@@ -99,10 +98,10 @@ void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, in
         //right
         while (board->grid[srcIndexX][srcIndexY]->x + count < board->grid[destIndexX][destIndexY]->x)
         {
-            al_clear_to_color(al_map_rgb(0, 0, 0));
-            drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x + count, board->grid[srcIndexX][srcIndexY]->y);
-            drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x - count, board->grid[destIndexX][destIndexY]->y);
-            drawBoard(board);
+            al_draw_bitmap(bg, 0,0,0);
+            drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x + count, board->grid[srcIndexX][srcIndexY]->y, sprites);
+            drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x - count, board->grid[destIndexX][destIndexY]->y, sprites);
+            drawBoard(board, sprites);
             al_flip_display();
             count += 4;
         }
@@ -112,10 +111,10 @@ void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, in
         //down
         while (board->grid[srcIndexX][srcIndexY]->y + count < board->grid[destIndexX][destIndexY]->y)
         {
-            al_clear_to_color(al_map_rgb(0, 0, 0));
-            drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x, board->grid[srcIndexX][srcIndexY]->y + count);
-            drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x, board->grid[destIndexX][destIndexY]->y - count);
-            drawBoard(board);
+            al_draw_bitmap(bg, 0,0,0);
+            drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x, board->grid[srcIndexX][srcIndexY]->y + count, sprites);
+            drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x, board->grid[destIndexX][destIndexY]->y - count, sprites);
+            drawBoard(board, sprites);
             al_flip_display();
             count += 4;
         }
@@ -125,10 +124,10 @@ void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, in
         //left
         while (board->grid[srcIndexX][srcIndexY]->x - count > board->grid[destIndexX][destIndexY]->x)
         {
-            al_clear_to_color(al_map_rgb(0, 0, 0));
-            drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x - count, board->grid[srcIndexX][srcIndexY]->y);
-            drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x + count, board->grid[destIndexX][destIndexY]->y);
-            drawBoard(board);
+            al_draw_bitmap(bg, 0,0,0);
+            drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x - count, board->grid[srcIndexX][srcIndexY]->y, sprites);
+            drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x + count, board->grid[destIndexX][destIndexY]->y, sprites);
+            drawBoard(board, sprites);
             al_flip_display();
             count += 4;
         }
@@ -138,10 +137,10 @@ void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, in
         //up
         while (board->grid[srcIndexX][srcIndexY]->y - count > board->grid[destIndexX][destIndexY]->y)
         {
-            al_clear_to_color(al_map_rgb(0, 0, 0));
-            drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x, board->grid[srcIndexX][srcIndexY]->y - count);
-            drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x, board->grid[destIndexX][destIndexY]->y + count);
-            drawBoard(board);
+            al_draw_bitmap(bg, 0,0,0);
+            drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x, board->grid[srcIndexX][srcIndexY]->y - count, sprites);
+            drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x, board->grid[destIndexX][destIndexY]->y + count, sprites);
+            drawBoard(board, sprites);
             al_flip_display();
             count += 4;
         }

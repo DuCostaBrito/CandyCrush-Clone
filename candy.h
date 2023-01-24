@@ -49,7 +49,7 @@ typedef struct BOARD
 } BOARD;
 
 BOARD *createBoard();
-void drawBoard(BOARD *board);
-void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY);
+void drawBoard(BOARD *board, ALLEGRO_BITMAP *sprites[8]);
+void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8]);
 
 #endif
