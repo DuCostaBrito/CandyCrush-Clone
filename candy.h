@@ -37,7 +37,7 @@ typedef struct CANDY
     int x, y;
     int xBoardPos, yBoardPos;
     CANDY_TYPE type;
-    bool rightPosition;
+    bool moving;
     bool match;
 } CANDY;
 
