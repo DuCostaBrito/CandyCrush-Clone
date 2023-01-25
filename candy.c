@@ -172,6 +172,7 @@ bool verifyMatch(BOARD *board)
             board->grid[i][2]->match = true;
             board->grid[i][3]->match = true;
             board->grid[i][4]->match = true;
+            board->score = board->score + 500;
             match = true;
             return match;
         }
@@ -189,6 +190,7 @@ bool verifyMatch(BOARD *board)
                 board->grid[i][j + 1]->match = true;
                 board->grid[i][j + 2]->match = true;
                 board->grid[i][j + 3]->match = true;
+                board->score = board->score + 400;
                 match = true;
                 return match;
             }
@@ -205,6 +207,7 @@ bool verifyMatch(BOARD *board)
                 board->grid[i + 1][j]->match = true;
                 board->grid[i + 2][j]->match = true;
                 board->grid[i + 3][j]->match = true;
+                board->score = board->score + 400;
                 match = true;
                 return match;
             }
@@ -219,6 +222,7 @@ bool verifyMatch(BOARD *board)
                 board->grid[i][j]->match = true;
                 board->grid[i][j + 1]->match = true;
                 board->grid[i][j + 2]->match = true;
+                board->score = board->score + 300;
                 match = true;
                 return match;
             }
@@ -234,6 +238,7 @@ bool verifyMatch(BOARD *board)
                 board->grid[i][j]->match = true;
                 board->grid[i + 1][j]->match = true;
                 board->grid[i + 2][j]->match = true;
+                board->score = board->score + 300;
                 match = true;
                 return match;
             }
