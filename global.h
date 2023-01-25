@@ -56,6 +56,7 @@ extern ALLEGRO_SAMPLE *sample_bg;
 extern ALLEGRO_SAMPLE *sample_mult[5];
 extern ALLEGRO_SAMPLE *sample_clear;
 extern ALLEGRO_SAMPLE *sample_wrong_play;
+extern ALLEGRO_SAMPLE_INSTANCE *bg_instance;
 
 // ----------------------------- FUNCOES ---------------------------------- //
 // Retorna um inteiro aleatorio entre lo e hi

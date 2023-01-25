@@ -1,7 +1,7 @@
 #include "init.h"
 
 
-void init()
+void game_init()
 {
     must_init(al_init(), "inicio");
     al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);

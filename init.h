@@ -11,8 +11,6 @@
 #include "global.h"
 #include "audio.h"
 
-
-
-void init();
+void game_init();
 
 #endif

@@ -15,6 +15,7 @@ ALLEGRO_SAMPLE *sample_bg;
 ALLEGRO_SAMPLE *sample_mult[5];
 ALLEGRO_SAMPLE *sample_clear;
 ALLEGRO_SAMPLE *sample_wrong_play;
+ALLEGRO_SAMPLE_INSTANCE *bg_instance;
 
 // ----------------------------- FUNCOES ---------------------------------- //
 void must_init(bool test, const char *description)

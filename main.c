@@ -7,6 +7,7 @@
 #include <time.h>
 #include "candy.h"
 #include "global.h"
+#include "init.h"
 
 int main()
 {
@@ -27,21 +28,26 @@ int main()
     int srcIndexCandyX, srcIndexCandyY;
     int destIndexCandyX, destIndexCandyY;
 
-    init();
+    game_init();
+    bg_instance = al_create_sample_instance(sample_bg);
+    al_set_sample_instance_playmode(bg_instance, ALLEGRO_PLAYMODE_LOOP);
+    al_attach_sample_instance_to_mixer(bg_instance, al_get_default_mixer());
     ALLEGRO_EVENT ev;
     al_start_timer(timer);
+    
+    al_play_sample_instance(bg_instance);
     while (verifyMatch(board) || isEmpty(board))
     {
         fallBoard(board, sprites);
         fillBoard(board, sprites);
     }
-
     while (1)
     {
         al_wait_for_event(queue, &ev);
         switch (ev.type)
         {
         case ALLEGRO_EVENT_TIMER:
+            
             if (key[ALLEGRO_KEY_ESCAPE])
                 done = true;
             for (int i = 0; i < ALLEGRO_KEY_MAX; i++)
