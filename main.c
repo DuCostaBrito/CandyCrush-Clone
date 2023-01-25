@@ -14,7 +14,7 @@ int main()
     srand(time(0));
     board = createBoard();
     int i, j;
-    int w = 1;
+    int mult = 0;
     bool verified = true;
 
     bool done = false;
@@ -34,20 +34,24 @@ int main()
     al_attach_sample_instance_to_mixer(bg_instance, al_get_default_mixer());
     ALLEGRO_EVENT ev;
     al_start_timer(timer);
-    
+
     al_play_sample_instance(bg_instance);
-    while (verifyMatch(board) || isEmpty(board))
+    while (verifyMatch(board, mult) || isEmpty(board))
     {
         fallBoard(board, sprites);
         fillBoard(board, sprites);
+        mult++;
+        if (mult >= 5)
+            mult = 5;
     }
+    mult = 0;
     while (1)
     {
         al_wait_for_event(queue, &ev);
         switch (ev.type)
         {
         case ALLEGRO_EVENT_TIMER:
-            
+
             if (key[ALLEGRO_KEY_ESCAPE])
                 done = true;
             for (int i = 0; i < ALLEGRO_KEY_MAX; i++)
@@ -75,21 +79,25 @@ int main()
                     (((destIndexCandyY == srcIndexCandyY + 1) || (destIndexCandyY == srcIndexCandyY - 1)) && (destIndexCandyX == srcIndexCandyX)))
                 {
                     swipeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY, sprites);
-                    if (!verifyMatch(board)){
+                    if (!verifyMatch(board, mult))
+                    {
                         swipeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY, sprites);
                         al_play_sample(sample_wrong_play, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
                     }
-
                 }
                 mousePressed = false;
                 // Se nao for uma jogada valida
 
                 // Ajusta o tabuleiro
-                while (verifyMatch(board) || isEmpty(board))
+                while (verifyMatch(board, mult) || isEmpty(board))
                 {
                     fallBoard(board, sprites);
                     fillBoard(board, sprites);
+                    mult++;
+                    if (mult >= 5)
+                        mult = 5;
                 }
+                mult = 0;
             }
             redraw = true;
             break;
@@ -121,7 +129,7 @@ int main()
             break;
         if (redraw && al_is_event_queue_empty(queue))
         {
-            
+
             al_draw_bitmap(sprites[18], 0, 0, 0);
             showScore(sprites, board);
             drawBoard(board, sprites);
@@ -130,7 +138,7 @@ int main()
         }
     }
     al_destroy_sample(sample_bg);
-    al_destroy_sample(sample_clear);
+    al_destroy_sample(sample_mult[5]);
     al_destroy_sample(sample_wrong_play);
     al_destroy_sample(sample_mult[0]);
     al_destroy_sample(sample_mult[1]);

@@ -21,7 +21,7 @@
 BOARD *createBoard();
 void drawBoard(BOARD *board, ALLEGRO_BITMAP *sprites[19]);
 void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY, ALLEGRO_BITMAP *sprites[19]);
-bool verifyMatch(BOARD *board);
+bool verifyMatch(BOARD *board, int mult);
 void fallBoard(BOARD *board, ALLEGRO_BITMAP *sprites[19]);
 bool isEmpty(BOARD *board);
 void  fillBoard(BOARD *board, ALLEGRO_BITMAP *sprites[19]);

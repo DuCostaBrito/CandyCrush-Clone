@@ -12,8 +12,7 @@ ALLEGRO_BITMAP      *sprites[19];
 ALLEGRO_TIMER       *timer;
 ALLEGRO_EVENT_QUEUE *queue;
 ALLEGRO_SAMPLE *sample_bg;
-ALLEGRO_SAMPLE *sample_mult[5];
-ALLEGRO_SAMPLE *sample_clear;
+ALLEGRO_SAMPLE *sample_mult[6];
 ALLEGRO_SAMPLE *sample_wrong_play;
 ALLEGRO_SAMPLE_INSTANCE *bg_instance;
 

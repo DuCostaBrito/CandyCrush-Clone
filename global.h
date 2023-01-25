@@ -53,8 +53,7 @@ extern ALLEGRO_BITMAP      *sprites[19];
 extern ALLEGRO_TIMER       *timer;
 extern ALLEGRO_EVENT_QUEUE *queue;
 extern ALLEGRO_SAMPLE *sample_bg;
-extern ALLEGRO_SAMPLE *sample_mult[5];
-extern ALLEGRO_SAMPLE *sample_clear;
+extern ALLEGRO_SAMPLE *sample_mult[6];
 extern ALLEGRO_SAMPLE *sample_wrong_play;
 extern ALLEGRO_SAMPLE_INSTANCE *bg_instance;
 
