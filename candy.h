@@ -52,5 +52,6 @@ BOARD *createBoard();
 void drawBoard(BOARD *board, ALLEGRO_BITMAP *sprites[8]);
 void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8]);
 bool verifyMatch(BOARD *board);
+void candyFall(BOARD *board, CANDY *candy, int x, int y, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8]);
 
 #endif

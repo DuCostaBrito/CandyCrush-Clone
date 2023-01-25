@@ -71,9 +71,6 @@ void drawCandy(CANDY *candy, int x, int y, ALLEGRO_BITMAP *sprites[8])
     case CT_BLACK:
         al_draw_bitmap(sprites[7], x, y, 0);
         break;
-
-    default:
-        break;
     }
 }
 
@@ -147,7 +144,7 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
             count += 4;
         }
     }
-    printf("srcX: %d, srcY: %d, destX: %d, destY: %d \n", srcIndexX, srcIndexY, destIndexX, destIndexY);
+    printf("srcX: %d, srcY: %d, destX: %d, destY: %d (srcType: %d, desstType: %d)\n", srcIndexX, srcIndexY, destIndexX, destIndexY, board->grid[srcIndexX][srcIndexY]->type, board->grid[destIndexX][destIndexY]->type);
     board->grid[srcIndexX][srcIndexY]->moving = false;
     board->grid[destIndexX][destIndexY]->moving = false;
     board->grid[srcIndexX][srcIndexY]->type = board->grid[destIndexX][destIndexY]->type;
@@ -157,5 +154,90 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
 
 bool verifyMatch(BOARD *board)
 {
+    bool match = false;
+    int i, j;
+    int count = 0;
+    enum CANDY_TYPE ct;
+    // Verificando matchs horizontais
+    for (int i = 0; i < BOARD_ROW; i++)
+    {
+        if (board->grid[i][0]->type == board->grid[i][1]->type &&
+            board->grid[i][0]->type == board->grid[i][2]->type &&
+            board->grid[i][0]->type == board->grid[i][3]->type &&
+            board->grid[i][0]->type == board->grid[i][4]->type &&
+            !board->grid[i][0]->match)
+        {
+            board->grid[i][0]->match = true;
+            board->grid[i][1]->match = true;
+            board->grid[i][2]->match = true;
+            board->grid[i][3]->match = true;
+            board->grid[i][4]->match = true;
+            match = true;
+            return match;
+        }
+    }
 
+    for (int i = 0; i < BOARD_ROW; i++)
+        for (int j = 0; j < BOARD_COL - 3; j++)
+        {
+            if (board->grid[i][j]->type == board->grid[i][j + 1]->type &&
+                board->grid[i][j]->type == board->grid[i][j + 2]->type &&
+                board->grid[i][j]->type == board->grid[i][j + 3]->type &&
+                !board->grid[i][j]->match)
+            {
+                board->grid[i][j]->match = true;
+                board->grid[i][j + 1]->match = true;
+                board->grid[i][j + 2]->match = true;
+                board->grid[i][j + 3]->match = true;
+                match = true;
+                return match;
+            }
+        }
+    for (int i = 0; i < BOARD_ROW - 3; i++)
+        for (int j = 0; j < BOARD_COL; j++)
+        {
+            if (board->grid[i][j]->type == board->grid[i + 1][j]->type &&
+                board->grid[i][j]->type == board->grid[i + 2][j]->type &&
+                board->grid[i][j]->type == board->grid[i + 3][j]->type &&
+                !board->grid[i][j]->match)
+            {
+                board->grid[i][j]->match = true;
+                board->grid[i + 1][j]->match = true;
+                board->grid[i + 2][j]->match = true;
+                board->grid[i + 3][j]->match = true;
+                match = true;
+                return match;
+            }
+        }
+    for (int i = 0; i < BOARD_ROW; i++)
+        for (int j = 0; j < BOARD_COL - 2; j++)
+        {
+            if (board->grid[i][j]->type == board->grid[i][j + 1]->type &&
+                board->grid[i][j]->type == board->grid[i][j + 2]->type &&
+                !board->grid[i][j]->match)
+            {
+                board->grid[i][j]->match = true;
+                board->grid[i][j + 1]->match = true;
+                board->grid[i][j + 2]->match = true;
+                match = true;
+                return match;
+            }
+        }
+    // Verificando matchs verticais
+
+    for (int i = 0; i < BOARD_ROW - 2; i++)
+        for (int j = 0; j < BOARD_COL; j++)
+        {
+            if (board->grid[i][j]->type == board->grid[i + 1][j]->type &&
+                board->grid[i][j]->type == board->grid[i + 2][j]->type &&
+                !board->grid[i][j]->match)
+            {
+                board->grid[i][j]->match = true;
+                board->grid[i + 1][j]->match = true;
+                board->grid[i + 2][j]->match = true;
+                match = true;
+                return match;
+            }
+        }
+    return match;
 }

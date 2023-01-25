@@ -40,6 +40,8 @@ int main()
     int width = 570;
     int height = 1024;
     int i, j;
+    int w = 1;
+    bool verified = true;
 
     bool done = false;
     bool redraw = true;
@@ -93,8 +95,8 @@ int main()
     ALLEGRO_BITMAP *sprites[8];
     sprites[0] = sprite_grab(0, 0, 70, 70, spriteSheet);
     sprites[1] = sprite_grab(70, 0, 70, 70, spriteSheet);
-    sprites[2] = sprite_grab(0, 70, 70, 70, spriteSheet);
-    sprites[3] = sprite_grab(70, 70, 70, 70, spriteSheet);
+    sprites[2] = sprite_grab(70, 70, 70, 70, spriteSheet);
+    sprites[3] = sprite_grab(70, 210, 70, 70, spriteSheet);
     sprites[4] = sprite_grab(140, 70, 70, 70, spriteSheet);
     sprites[5] = sprite_grab(140, 140, 70, 70, spriteSheet);
     sprites[6] = sprite_grab(0, 140, 70, 70, spriteSheet);
@@ -109,8 +111,11 @@ int main()
         switch (ev.type)
         {
         case ALLEGRO_EVENT_TIMER:
-            if (key[ALLEGRO_KEY_0])
+            if (key[ALLEGRO_KEY_0] && verified){
                 verifyMatch(board);
+                verified = false;
+            }
+                
             if (key[ALLEGRO_KEY_ESCAPE])
                 done = true;
             for (int i = 0; i < ALLEGRO_KEY_MAX; i++)
@@ -138,6 +143,7 @@ int main()
                 (((destIndexCandyY == srcIndexCandyY + 1) || (destIndexCandyY == srcIndexCandyY - 1)) && (destIndexCandyX == srcIndexCandyX)))
                     swipeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY, background, sprites);
                 mousePressed = false;
+                verified = true;
             }
             redraw = true;
             break;
@@ -167,6 +173,8 @@ int main()
         }
         if (done)
             break;
+        while (verifyMatch(board))
+            w++;
         
         if (redraw && al_is_event_queue_empty(queue))
         {
