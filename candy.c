@@ -150,6 +150,18 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
     return;
 }
 
+void showMult(int mult){
+    int count;
+    for (count = 0; count < 40; count++){
+        al_draw_bitmap(sprites[18], 0, 0, 0);
+        drawBoard(board, sprites);
+        showScore(sprites, board);
+        al_draw_bitmap(sprites[mult], 180 + count, 100 - count, 0);
+        al_flip_display();
+    }
+    return;
+}
+
 bool verifyMatch(BOARD *board, int mult)
 {
     bool match = false;
@@ -171,6 +183,7 @@ bool verifyMatch(BOARD *board, int mult)
             board->grid[i][3]->match = true;
             board->grid[i][4]->match = true;
             board->score = board->score + ((mult + 1) * 500);
+            showMult(mult + 1);
             al_play_sample(sample_mult[mult], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             match = true;
             return match;
@@ -190,6 +203,7 @@ bool verifyMatch(BOARD *board, int mult)
                 board->grid[i][j + 2]->match = true;
                 board->grid[i][j + 3]->match = true;
                 board->score = board->score + ((mult + 1) * 400);
+                showMult(mult + 1);
                 al_play_sample(sample_mult[mult], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
                 match = true;
                 return match;
@@ -208,6 +222,7 @@ bool verifyMatch(BOARD *board, int mult)
                 board->grid[i + 2][j]->match = true;
                 board->grid[i + 3][j]->match = true;
                 board->score = board->score + ((mult + 1) * 400);
+                showMult(mult + 1);
                 al_play_sample(sample_mult[mult], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
                 match = true;
                 return match;
@@ -224,6 +239,7 @@ bool verifyMatch(BOARD *board, int mult)
                 board->grid[i][j + 1]->match = true;
                 board->grid[i][j + 2]->match = true;
                 board->score = board->score + ((mult + 1) * 300);
+                showMult(mult + 1);
                 al_play_sample(sample_mult[mult], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
                 match = true;
                 return match;
@@ -241,6 +257,7 @@ bool verifyMatch(BOARD *board, int mult)
                 board->grid[i + 1][j]->match = true;
                 board->grid[i + 2][j]->match = true;
                 board->score = board->score + ((mult + 1) * 300);
+                showMult(mult  + 1);
                 al_play_sample(sample_mult[mult], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
                 match = true;
                 return match;
@@ -313,3 +330,4 @@ void showScore(ALLEGRO_BITMAP *numbers[19], BOARD *board){
     al_draw_bitmap(numbers[uni], 146, 80, 0);
     return;
 }
+
