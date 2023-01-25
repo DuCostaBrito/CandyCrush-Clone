@@ -1,6 +1,8 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include <stdio.h>
 #include <time.h>
 #include "candy.h"
@@ -114,6 +116,15 @@ int main()
     sprites[17] = sprite_grab(140, 0, 70, 70, spriteSheet);
     sprites[18] = al_load_bitmap("resources/images/background.png");
     
+    //Audio
+    must_init(al_install_audio(), "audio");
+    must_init(al_init_acodec_addon(), "audio codecs");
+    must_init(al_reserve_samples(16), "reserve samples");
+    ALLEGRO_SAMPLE *sample_bg;
+    ALLEGRO_SAMPLE *sample_mult[5];
+    ALLEGRO_SAMPLE *sample_clear;
+    ALLEGRO_SAMPLE *sample_wrong_play = al_load_sample("resources/sounds/wrong_move.ogg");
+    must_init(sample_wrong_play, "wrong play");
 
     ALLEGRO_EVENT ev;
     al_start_timer(timer);
@@ -157,8 +168,11 @@ int main()
                     (((destIndexCandyY == srcIndexCandyY + 1) || (destIndexCandyY == srcIndexCandyY - 1)) && (destIndexCandyX == srcIndexCandyX)))
                 {
                     swipeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY, sprites);
-                    if (!verifyMatch(board))
+                    if (!verifyMatch(board)){
                         swipeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY, sprites);
+                        al_play_sample(sample_wrong_play, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                    }
+
                 }
                 mousePressed = false;
                 // Se nao for uma jogada valida
@@ -208,6 +222,15 @@ int main()
             redraw = false;
         }
     }
+    al_destroy_sample(sample_bg);
+    al_destroy_sample(sample_clear);
+    al_destroy_sample(sample_wrong_play);
+    al_destroy_sample(sample_mult[0]);
+    al_destroy_sample(sample_mult[1]);
+    al_destroy_sample(sample_mult[2]);
+    al_destroy_sample(sample_mult[3]);
+    al_destroy_sample(sample_mult[4]);
+
     al_destroy_bitmap(sprites[0]);
     al_destroy_bitmap(sprites[1]);
     al_destroy_bitmap(sprites[2]);
