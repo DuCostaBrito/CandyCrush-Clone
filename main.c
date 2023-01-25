@@ -109,6 +109,8 @@ int main()
         switch (ev.type)
         {
         case ALLEGRO_EVENT_TIMER:
+            if (key[ALLEGRO_KEY_0])
+                verifyMatch(board);
             if (key[ALLEGRO_KEY_ESCAPE])
                 done = true;
             for (int i = 0; i < ALLEGRO_KEY_MAX; i++)
@@ -134,7 +136,7 @@ int main()
                 //testando se foi tentado mexer com uma peca adjacente (nao diagonal) 
                 if ((((destIndexCandyX == srcIndexCandyX + 1) || (destIndexCandyX == srcIndexCandyX - 1)) && (destIndexCandyY == srcIndexCandyY)) ||
                 (((destIndexCandyY == srcIndexCandyY + 1) || (destIndexCandyY == srcIndexCandyY - 1)) && (destIndexCandyX == srcIndexCandyX)))
-                    changeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY, background, sprites);
+                    swipeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY, background, sprites);
                 mousePressed = false;
             }
             redraw = true;
@@ -169,6 +171,7 @@ int main()
         if (redraw && al_is_event_queue_empty(queue))
         {
             // al_draw_filled_rounded_rectangle(50, 150, width - 50, height - 50, 40, 40, al_map_rgba(0, 0, 0, 100));
+            
             al_draw_bitmap(background, 0, 0, 0);
             drawBoard(board, sprites);
             al_flip_display(); // Buffer

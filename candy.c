@@ -44,6 +44,8 @@ BOARD *createBoard()
 
 void drawCandy(CANDY *candy, int x, int y, ALLEGRO_BITMAP *sprites[8])
 {
+    if (candy->match)
+        return;
     switch (candy->type)
     {
     case CT_RED:
@@ -87,7 +89,7 @@ void drawBoard(BOARD *board, ALLEGRO_BITMAP *sprites[8])
     }
 }
 
-void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8])
+void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8])
 {
     int count = 2;
     enum CANDY_TYPE aux = board->grid[srcIndexX][srcIndexY]->type;
@@ -95,10 +97,10 @@ void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, in
     board->grid[destIndexX][destIndexY]->moving = true;
     if (srcIndexY < destIndexY)
     {
-        //right
+        // right
         while (board->grid[srcIndexX][srcIndexY]->x + count < board->grid[destIndexX][destIndexY]->x)
         {
-            al_draw_bitmap(bg, 0,0,0);
+            al_draw_bitmap(bg, 0, 0, 0);
             drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x + count, board->grid[srcIndexX][srcIndexY]->y, sprites);
             drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x - count, board->grid[destIndexX][destIndexY]->y, sprites);
             drawBoard(board, sprites);
@@ -108,10 +110,10 @@ void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, in
     }
     else if (srcIndexX < destIndexX)
     {
-        //down
+        // down
         while (board->grid[srcIndexX][srcIndexY]->y + count < board->grid[destIndexX][destIndexY]->y)
         {
-            al_draw_bitmap(bg, 0,0,0);
+            al_draw_bitmap(bg, 0, 0, 0);
             drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x, board->grid[srcIndexX][srcIndexY]->y + count, sprites);
             drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x, board->grid[destIndexX][destIndexY]->y - count, sprites);
             drawBoard(board, sprites);
@@ -121,10 +123,10 @@ void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, in
     }
     else if (srcIndexY > destIndexY)
     {
-        //left
+        // left
         while (board->grid[srcIndexX][srcIndexY]->x - count > board->grid[destIndexX][destIndexY]->x)
         {
-            al_draw_bitmap(bg, 0,0,0);
+            al_draw_bitmap(bg, 0, 0, 0);
             drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x - count, board->grid[srcIndexX][srcIndexY]->y, sprites);
             drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x + count, board->grid[destIndexX][destIndexY]->y, sprites);
             drawBoard(board, sprites);
@@ -134,10 +136,10 @@ void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, in
     }
     else if (srcIndexX > destIndexX)
     {
-        //up
+        // up
         while (board->grid[srcIndexX][srcIndexY]->y - count > board->grid[destIndexX][destIndexY]->y)
         {
-            al_draw_bitmap(bg, 0,0,0);
+            al_draw_bitmap(bg, 0, 0, 0);
             drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x, board->grid[srcIndexX][srcIndexY]->y - count, sprites);
             drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x, board->grid[destIndexX][destIndexY]->y + count, sprites);
             drawBoard(board, sprites);
@@ -145,9 +147,15 @@ void changeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, in
             count += 4;
         }
     }
+    printf("srcX: %d, srcY: %d, destX: %d, destY: %d \n", srcIndexX, srcIndexY, destIndexX, destIndexY);
     board->grid[srcIndexX][srcIndexY]->moving = false;
     board->grid[destIndexX][destIndexY]->moving = false;
     board->grid[srcIndexX][srcIndexY]->type = board->grid[destIndexX][destIndexY]->type;
     board->grid[destIndexX][destIndexY]->type = aux;
     return;
+}
+
+bool verifyMatch(BOARD *board)
+{
+
 }
