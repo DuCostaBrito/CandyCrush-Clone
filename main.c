@@ -8,6 +8,7 @@
 #include "candy.h"
 #include "global.h"
 #include "init.h"
+#include "menu.h"
 
 int main()
 {
@@ -34,8 +35,6 @@ int main()
     al_attach_sample_instance_to_mixer(bg_instance, al_get_default_mixer());
     ALLEGRO_EVENT ev;
     al_start_timer(timer);
-
-    al_play_sample_instance(bg_instance);
     while (verifyMatch(board, mult) || isEmpty(board))
     {
         fallBoard(board, sprites);
@@ -48,16 +47,82 @@ int main()
     while (1)
     {
         al_wait_for_event(queue, &ev);
+
         switch (ev.type)
         {
         case ALLEGRO_EVENT_TIMER:
-
+            if (music_on)
+                al_play_sample_instance(bg_instance);
+            else
+                al_stop_sample_instance(bg_instance);
             if (key[ALLEGRO_KEY_ESCAPE])
                 done = true;
             for (int i = 0; i < ALLEGRO_KEY_MAX; i++)
                 key[i] &= KEY_SEEN;
             if (mousePressed)
             {
+                mousePressed = false;
+                if (within(450 + 70, 450, xMouseOrigin) && within(60 + 70, 60, yMouseOrigin))
+                {
+                    ALLEGRO_EVENT ev;
+                    setting_on = !setting_on;
+                    while (setting_on)
+                    {
+                        al_wait_for_event(queue, &ev);
+                        switch (ev.type)
+                        {
+                        case ALLEGRO_EVENT_TIMER:
+                            if (mousePressed)
+                            {
+                                if (within(450 + 70, 450, xMouseOrigin) && within(60 + 70, 60, yMouseOrigin))
+                                {
+                                    setting_on = !setting_on;
+                                    mousePressed = false;
+                                }
+                                else if (within(450 + 70, 450, xMouseOrigin) && within(140 + 70, 140, yMouseOrigin))
+                                {
+                                    music_on = !music_on;
+                                    mousePressed = false;
+                                }
+                                else if (within(450 + 70, 450, xMouseOrigin) && within(220 + 70, 220, yMouseOrigin))
+                                {
+                                    sound_on = !sound_on;
+                                    mousePressed = false;
+                                }
+                                else if (within(450 + 70, 450, xMouseOrigin) && within(290 + 70, 290, yMouseOrigin))
+                                {
+                                    shuffleBoard(board);
+                                    mousePressed = false;
+                                }
+                            }
+
+                        case ALLEGRO_EVENT_MOUSE_AXES:
+                            xMouse = ev.mouse.x;
+                            yMouse = ev.mouse.y;
+                            break;
+                        case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+                            xMouseOrigin = ev.mouse.x;
+                            yMouseOrigin = ev.mouse.y;
+                            mousePressed = false;
+                            break;
+                        case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+                            xMouseEnd = ev.mouse.x;
+                            yMouseEnd = ev.mouse.y;
+                            mousePressed = true;
+                            break;
+                        }
+                        redraw = true;
+                        if (redraw && al_is_event_queue_empty(queue))
+                        {
+                            al_draw_bitmap(sprites[18], 0, 0, 0);
+                            showScore(sprites, board);
+                            drawBoard(board, sprites);
+                            drawMenu();
+                            al_flip_display(); // Buffer
+                            redraw = false;
+                        }
+                    }
+                }
                 for (i = 0; i < BOARD_ROW; i++)
                 {
                     for (j = 0; j < BOARD_COL; j++)
@@ -82,10 +147,10 @@ int main()
                     if (!verifyMatch(board, mult))
                     {
                         swipeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY, sprites);
-                        al_play_sample(sample_wrong_play, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                        if (sound_on)
+                            al_play_sample(sample_wrong_play, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
                     }
                 }
-                mousePressed = false;
                 // Se nao for uma jogada valida
 
                 // Ajusta o tabuleiro
@@ -129,10 +194,11 @@ int main()
             break;
         if (redraw && al_is_event_queue_empty(queue))
         {
-
             al_draw_bitmap(sprites[18], 0, 0, 0);
+
             showScore(sprites, board);
             drawBoard(board, sprites);
+            drawSetting();
             al_flip_display(); // Buffer
             redraw = false;
         }

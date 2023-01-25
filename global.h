@@ -8,6 +8,7 @@
 // ----------- VARIAVEIS --------- //
 #define WIDTH 570
 #define HEIGHT 1024
+#define N_SPRITES 26
 #define FPS 60
 #define BOARD_ROW 9
 #define BOARD_COL 5
@@ -46,10 +47,13 @@ typedef struct BOARD
 // ---------------------------- VARIAVEIS GLOBAIS ------------------------- //
 extern BOARD               *board;
 extern unsigned char       key[ALLEGRO_KEY_MAX];
+extern bool setting_on;
+extern bool music_on;
+extern bool sound_on;
 
 // -------------- ALLEGRO ------------- //
 extern ALLEGRO_DISPLAY     *display;
-extern ALLEGRO_BITMAP      *sprites[19];
+extern ALLEGRO_BITMAP      *sprites[N_SPRITES];
 extern ALLEGRO_TIMER       *timer;
 extern ALLEGRO_EVENT_QUEUE *queue;
 extern ALLEGRO_SAMPLE *sample_bg;

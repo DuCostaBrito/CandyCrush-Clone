@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "global.h"
+#include "menu.h"
 
 //Definindo cores
 #define PIXEL(r,g,b) (al_map_rgb((unsigned char) r, (unsigned char) g, (unsigned char) b))
@@ -19,12 +20,13 @@
 #define BLACK PIXEL(0,0,0)
 
 BOARD *createBoard();
-void drawBoard(BOARD *board, ALLEGRO_BITMAP *sprites[19]);
+void drawBoard(BOARD *board, ALLEGRO_BITMAP *sprites[N_SPRITES]);
 void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY, ALLEGRO_BITMAP *sprites[19]);
 bool verifyMatch(BOARD *board, int mult);
-void fallBoard(BOARD *board, ALLEGRO_BITMAP *sprites[19]);
+void fallBoard(BOARD *board, ALLEGRO_BITMAP *sprites[N_SPRITES]);
 bool isEmpty(BOARD *board);
-void  fillBoard(BOARD *board, ALLEGRO_BITMAP *sprites[19]);
+void  fillBoard(BOARD *board, ALLEGRO_BITMAP *sprites[N_SPRITES]);
 void showScore(ALLEGRO_BITMAP *numbers[10], BOARD *board);
+void shuffleBoard(BOARD *board);
 
 #endif

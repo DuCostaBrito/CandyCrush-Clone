@@ -5,10 +5,13 @@
 // ---------------------------- VARIAVEIS GLOBAIS ------------------------- //
 BOARD               *board;
 unsigned char       key[ALLEGRO_KEY_MAX];
+bool setting_on = false;
+bool music_on = true;
+bool sound_on = true;
 
 // -------------- ALLEGRO ------------- //
 ALLEGRO_DISPLAY     *display;
-ALLEGRO_BITMAP      *sprites[19];
+ALLEGRO_BITMAP      *sprites[N_SPRITES];
 ALLEGRO_TIMER       *timer;
 ALLEGRO_EVENT_QUEUE *queue;
 ALLEGRO_SAMPLE *sample_bg;

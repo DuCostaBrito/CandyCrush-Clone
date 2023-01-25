@@ -47,6 +47,19 @@ void game_init()
     sprites[16] = sprite_grab(0, 140, 70, 70, spriteSheet);
     sprites[17] = sprite_grab(140, 0, 70, 70, spriteSheet);
     sprites[18] = al_load_bitmap("resources/images/background.png");
+    sprites[19] = al_load_bitmap("resources/images/gui_settings.png");
+    sprites[20] = al_load_bitmap("resources/images/gui_music_on.png");
+    must_init(sprites[20], "20");
+    sprites[21] = al_load_bitmap("resources/images/gui_music_off.png");
+    must_init(sprites[21], "21");
+    sprites[22] = al_load_bitmap("resources/images/gui_sound_on.png");
+    must_init(sprites[22], "22");
+    sprites[23] = al_load_bitmap("resources/images/gui_sound_off.png");
+    must_init(sprites[23], "23");
+    sprites[24] = al_load_bitmap("resources/images/gui_shuffle.png");
+    must_init(sprites[24], "24");
+    sprites[25] = al_load_bitmap("resources/images/gui_settings_on.png");
+    must_init(sprites[25], "25");
     
     //Audio
     audio_init();
