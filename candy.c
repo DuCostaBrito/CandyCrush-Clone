@@ -86,7 +86,7 @@ void drawBoard(BOARD *board, ALLEGRO_BITMAP *sprites[8])
     }
 }
 
-void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8])
+void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8], ALLEGRO_BITMAP *numbers[10])
 {
     int count = 2;
     enum CANDY_TYPE aux = board->grid[srcIndexX][srcIndexY]->type;
@@ -101,6 +101,7 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
             drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x + count, board->grid[srcIndexX][srcIndexY]->y, sprites);
             drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x - count, board->grid[destIndexX][destIndexY]->y, sprites);
             drawBoard(board, sprites);
+            showScore(numbers, board);
             al_flip_display();
             count += 4;
         }
@@ -114,6 +115,7 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
             drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x, board->grid[srcIndexX][srcIndexY]->y + count, sprites);
             drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x, board->grid[destIndexX][destIndexY]->y - count, sprites);
             drawBoard(board, sprites);
+            showScore(numbers, board);
             al_flip_display();
             count += 4;
         }
@@ -127,6 +129,7 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
             drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x - count, board->grid[srcIndexX][srcIndexY]->y, sprites);
             drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x + count, board->grid[destIndexX][destIndexY]->y, sprites);
             drawBoard(board, sprites);
+            showScore(numbers, board);
             al_flip_display();
             count += 4;
         }
@@ -140,11 +143,11 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
             drawCandy(board->grid[srcIndexX][srcIndexY], board->grid[srcIndexX][srcIndexY]->x, board->grid[srcIndexX][srcIndexY]->y - count, sprites);
             drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x, board->grid[destIndexX][destIndexY]->y + count, sprites);
             drawBoard(board, sprites);
+            showScore(numbers, board);
             al_flip_display();
             count += 4;
         }
     }
-    printf("srcX: %d, srcY: %d, destX: %d, destY: %d (srcType: %d, desstType: %d)\n", srcIndexX, srcIndexY, destIndexX, destIndexY, board->grid[srcIndexX][srcIndexY]->type, board->grid[destIndexX][destIndexY]->type);
     board->grid[srcIndexX][srcIndexY]->moving = false;
     board->grid[destIndexX][destIndexY]->moving = false;
     board->grid[srcIndexX][srcIndexY]->type = board->grid[destIndexX][destIndexY]->type;
@@ -246,7 +249,7 @@ bool verifyMatch(BOARD *board)
     return match;
 }
 
-void fallBoard(BOARD *board, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8])
+void fallBoard(BOARD *board, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8], ALLEGRO_BITMAP *numbers[10])
 {
     int i, j;
     int c = 1;
@@ -261,7 +264,7 @@ void fallBoard(BOARD *board, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8])
                         return;
                     c++;
                 }
-                swipeColors(board, i, j, i - c, j, bg, sprites);
+                swipeColors(board, i, j, i - c, j, bg, sprites, numbers);
                 board->grid[i][j]->match = false;
                 board->grid[i - c][j]->match = true;
                 c = 1;
@@ -280,7 +283,7 @@ bool isEmpty(BOARD *board) {
     return false;
 }
 
-void fillBoard(BOARD *board, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8]){
+void fillBoard(BOARD *board, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8], ALLEGRO_BITMAP *numbers[10]){
     
     for (int j = 0; j < BOARD_COL; j++)
     {
@@ -289,6 +292,24 @@ void fillBoard(BOARD *board, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8]){
             board->grid[0][j]->match = false;
         }
     }
-    fallBoard(board, bg, sprites);
+    fallBoard(board, bg, sprites, numbers);
+    return;
+}
+
+void showScore(ALLEGRO_BITMAP *numbers[10], BOARD *board){
+    int total, uni, dez, cen, mil;
+    total = board->score;
+    uni = total%10;
+    total = floor(total/10);
+    dez = total%10;
+    total = floor(total/10);
+    cen = total%10;
+    total = floor(total/10);
+    mil = total;
+
+    al_draw_bitmap(numbers[mil], 56, 80, 0);
+    al_draw_bitmap(numbers[cen], 86, 80, 0);
+    al_draw_bitmap(numbers[dez], 116, 80, 0);
+    al_draw_bitmap(numbers[uni], 146, 80, 0);
     return;
 }

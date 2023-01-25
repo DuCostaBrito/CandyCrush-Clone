@@ -4,6 +4,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <stdio.h>
+#include <math.h>
 
 //Definindo cores
 #define PIXEL(r,g,b) (al_map_rgb((unsigned char) r, (unsigned char) g, (unsigned char) b))
@@ -50,10 +51,11 @@ typedef struct BOARD
 
 BOARD *createBoard();
 void drawBoard(BOARD *board, ALLEGRO_BITMAP *sprites[8]);
-void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8]);
+void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int destIndexY, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8], ALLEGRO_BITMAP *numbers[10]);
 bool verifyMatch(BOARD *board);
-void fallBoard(BOARD *board, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8]);
+void fallBoard(BOARD *board, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8], ALLEGRO_BITMAP *numbers[10]);
 bool isEmpty(BOARD *board);
-void  fillBoard(BOARD *board, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8]);
+void  fillBoard(BOARD *board, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8], ALLEGRO_BITMAP *numbers[10]);
+void showScore(ALLEGRO_BITMAP *numbers[10], BOARD *board);
 
 #endif
