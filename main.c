@@ -3,13 +3,53 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_native_dialog.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 #include <time.h>
 #include "candy.h"
 #include "global.h"
 #include "init.h"
 #include "menu.h"
 
+int itoa(int value, char *sp, int radix)
+{
+    char tmp[16]; // be careful with the length of the buffer
+    char *tp = tmp;
+    int i;
+    unsigned v;
+
+    int sign = (radix == 10 && value < 0);
+    if (sign)
+        v = -value;
+    else
+        v = (unsigned)value;
+
+    while (v || tp == tmp)
+    {
+        i = v % radix;
+        v /= radix;
+        if (i < 10)
+            *tp++ = i + '0';
+        else
+            *tp++ = i + 'a' - 10;
+    }
+
+    int len = tp - tmp;
+
+    if (sign)
+    {
+        *sp++ = '-';
+        len++;
+    }
+
+    while (tp > tmp)
+        *sp++ = *--tp;
+
+    return len;
+}
 int main()
 {
     srand(time(0));
@@ -43,6 +83,8 @@ int main()
         if (mult >= 5)
             mult = 5;
     }
+    while(!isPossible(board))
+        shuffleBoard(board);
     mult = 0;
     while (1)
     {
@@ -152,7 +194,6 @@ int main()
                     }
                 }
                 // Se nao for uma jogada valida
-
                 // Ajusta o tabuleiro
                 while (verifyMatch(board, mult) || isEmpty(board))
                 {
@@ -190,18 +231,28 @@ int main()
             done = true;
             break;
         }
-        if (done)
-            break;
+
         if (redraw && al_is_event_queue_empty(queue))
         {
             al_draw_bitmap(sprites[18], 0, 0, 0);
-
             showScore(sprites, board);
             drawBoard(board, sprites);
             drawSetting();
             al_flip_display(); // Buffer
             redraw = false;
+            if (!isPossible(board))
+            {
+                done = true;
+                char score[100];
+                strcpy(score, "Seu score final foi: ");
+                char snum[10];
+                itoa(board->score, snum, 10);
+                strcat(score, snum);
+                al_show_native_message_box(display, "MATCH3", "FIM DE JOGO", score, NULL, 0);
+            }
         }
+        if (done)
+            break;
     }
     al_destroy_sample(sample_bg);
     al_destroy_sample(sample_mult[5]);

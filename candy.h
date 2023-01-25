@@ -28,5 +28,6 @@ bool isEmpty(BOARD *board);
 void  fillBoard(BOARD *board, ALLEGRO_BITMAP *sprites[N_SPRITES]);
 void showScore(ALLEGRO_BITMAP *numbers[10], BOARD *board);
 void shuffleBoard(BOARD *board);
+bool isPossible(BOARD *board);
 
 #endif

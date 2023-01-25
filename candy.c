@@ -37,12 +37,13 @@ BOARD *createBoard()
     return board;
 }
 
-void shuffleBoard(BOARD *board){
+void shuffleBoard(BOARD *board)
+{
     for (int i = 0; i < BOARD_ROW; i++)
     {
         for (int j = 0; j < BOARD_COL; j++)
         {
-            board->grid[i][j]->type = aleat(0, CANDY_TYPE_N); 
+            board->grid[i][j]->type = aleat(0, CANDY_TYPE_N);
         }
     }
     return;
@@ -165,9 +166,11 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
     return;
 }
 
-void showMult(int mult){
+void showMult(int mult)
+{
     int count;
-    for (count = 0; count < 40; count++){
+    for (count = 0; count < 40; count++)
+    {
         al_draw_bitmap(sprites[18], 0, 0, 0);
         drawBoard(board, sprites);
         showScore(sprites, board);
@@ -176,6 +179,74 @@ void showMult(int mult){
         al_flip_display();
     }
     return;
+}
+
+bool isPossible(BOARD *board)
+{
+    int i, j;
+    // verifica horizontal
+    for (i = 0; i < BOARD_ROW; i++)
+        for (j = 0; j < BOARD_COL - 2; j++)
+        {
+            if (i == 0)
+            {
+                if (board->grid[i][j]->type == board->grid[i][j + 2]->type && board->grid[i + 1][j + 1]->type == board->grid[i][j]->type)
+                    return true;
+                else if (board->grid[i][j]->type == board->grid[i][j + 1]->type && board->grid[i + 1][j + 2]->type == board->grid[i][j]->type)
+                    return true;
+                else if (board->grid[i][j]->type == board->grid[i + 1][j + 2]->type && board->grid[i + 1][j + 1]->type == board->grid[i][j]->type)
+                    return true;
+            }
+            else if (i == BOARD_ROW - 1)
+            {
+                if (board->grid[i][j]->type == board->grid[i][j + 2]->type && board->grid[i - 1][j + 1]->type == board->grid[i][j]->type)
+                    return true;
+                else if (board->grid[i][j]->type == board->grid[i][j + 1]->type && board->grid[i - 1][j + 2]->type == board->grid[i][j]->type)
+                    return true;
+                else if (board->grid[i][j]->type == board->grid[i - 1][j + 1]->type && board->grid[i - 1][j + 2]->type == board->grid[i][j]->type)
+                    return true;
+            }
+            else if ((board->grid[i][j]->type == board->grid[i][j + 2]->type) && (board->grid[i + 1][j + 1]->type == board->grid[i][j]->type || board->grid[i - 1][j + 1]->type == board->grid[i][j]->type))
+                return true;
+            else if ((board->grid[i][j]->type == board->grid[i][j + 1]->type) && (board->grid[i + 1][j + 2]->type == board->grid[i][j]->type || board->grid[i - 1][j + 2]->type == board->grid[i][j]->type))
+                return true;
+            else if (board->grid[i][j]->type == board->grid[i - 1][j + 1]->type && board->grid[i - 1][j + 2]->type == board->grid[i][j]->type)
+                return true;
+            else if (board->grid[i][j]->type == board->grid[i + 1][j + 2]->type && board->grid[i + 1][j + 1]->type == board->grid[i][j]->type)
+                return true;
+        }
+    // verifica vertical
+    for (i = 0; i < BOARD_ROW - 2; i++)
+        for (j = 0; j < BOARD_COL; j++)
+        {
+            if (j == 0)
+            {
+                if (board->grid[i][j]->type == board->grid[i + 2][j]->type && board->grid[i + 1][j + 1]->type == board->grid[i][j]->type)
+                    return true;
+                else if (board->grid[i][j]->type == board->grid[i + 1][j]->type && board->grid[i + 2][j + 1]->type == board->grid[i][j]->type)
+                    return true;
+                else if (board->grid[i][j]->type == board->grid[i + 1][j + 1]->type && board->grid[i + 2][j + 1]->type == board->grid[i][j]->type)
+                    return true;
+            }
+            else if (j == BOARD_COL - 1)
+            {
+                if (board->grid[i][j]->type == board->grid[i + 2][j]->type && board->grid[i + 1][j - 1]->type == board->grid[i][j]->type)
+                    return true;
+                else if (board->grid[i][j]->type == board->grid[i + 1][j]->type && board->grid[i + 2][j - 1]->type == board->grid[i][j]->type)
+                    return true;
+                else if (board->grid[i][j]->type == board->grid[i + 1][j - 1]->type && board->grid[i + 2][j - 1]->type == board->grid[i][j]->type)
+                    return true;
+            }
+            else if ((board->grid[i][j]->type == board->grid[i + 2][j]->type) && (board->grid[i + 1][j + 1]->type == board->grid[i][j]->type || board->grid[i + 1][j - 1]->type == board->grid[i][j]->type))
+                return true;
+            else if ((board->grid[i][j]->type == board->grid[i + 1][j]->type) && (board->grid[i + 2][j + 1]->type == board->grid[i][j]->type || board->grid[i + 2][j - 1]->type == board->grid[i][j]->type))
+                return true;
+            else if (board->grid[i][j]->type == board->grid[i + 1][j - 1]->type && board->grid[i + 2][j - 1]->type == board->grid[i][j]->type)
+                return true;
+            else if (board->grid[i][j]->type == board->grid[i + 1][j + 1]->type && board->grid[i + 2][j + 1]->type == board->grid[i][j]->type)
+                return true;
+        }
+    return false;
 }
 
 bool verifyMatch(BOARD *board, int mult)
@@ -277,7 +348,7 @@ bool verifyMatch(BOARD *board, int mult)
                 board->grid[i + 1][j]->match = true;
                 board->grid[i + 2][j]->match = true;
                 board->score = board->score + ((mult + 1) * 300);
-                showMult(mult  + 1);
+                showMult(mult + 1);
                 if (sound_on)
                     al_play_sample(sample_mult[mult], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
                 match = true;
@@ -311,21 +382,25 @@ void fallBoard(BOARD *board, ALLEGRO_BITMAP *sprites[N_SPRITES])
     return;
 }
 
-bool isEmpty(BOARD *board) {
+bool isEmpty(BOARD *board)
+{
     int i, j;
     for (i = 0; i < BOARD_ROW; i++)
-        for(j = 0; j < BOARD_COL; j++){
+        for (j = 0; j < BOARD_COL; j++)
+        {
             if (board->grid[i][j]->match)
                 return true;
         }
     return false;
 }
 
-void fillBoard(BOARD *board, ALLEGRO_BITMAP *sprites[N_SPRITES]){
-    
+void fillBoard(BOARD *board, ALLEGRO_BITMAP *sprites[N_SPRITES])
+{
+
     for (int j = 0; j < BOARD_COL; j++)
     {
-        if (board->grid[0][j]->match){
+        if (board->grid[0][j]->match)
+        {
             board->grid[0][j]->type = aleat(0, CANDY_TYPE_N);
             board->grid[0][j]->match = false;
         }
@@ -334,21 +409,24 @@ void fillBoard(BOARD *board, ALLEGRO_BITMAP *sprites[N_SPRITES]){
     return;
 }
 
-void showScore(ALLEGRO_BITMAP *numbers[N_SPRITES], BOARD *board){
-    int total, uni, dez, cen, mil;
+void showScore(ALLEGRO_BITMAP *numbers[N_SPRITES], BOARD *board)
+{
+    int total, uni, dez, cen, mil, dez_mil;
     total = board->score;
-    uni = total%10;
-    total = floor(total/10);
-    dez = total%10;
-    total = floor(total/10);
-    cen = total%10;
-    total = floor(total/10);
-    mil = total;
+    uni = total % 10;
+    total = floor(total / 10);
+    dez = total % 10;
+    total = floor(total / 10);
+    cen = total % 10;
+    total = floor(total / 10);
+    mil = total % 10;
+    total = floor(total / 10);
+    dez_mil = total;
 
+    al_draw_bitmap(numbers[dez_mil], 26, 80, 0);
     al_draw_bitmap(numbers[mil], 56, 80, 0);
     al_draw_bitmap(numbers[cen], 86, 80, 0);
     al_draw_bitmap(numbers[dez], 116, 80, 0);
     al_draw_bitmap(numbers[uni], 146, 80, 0);
     return;
 }
-
