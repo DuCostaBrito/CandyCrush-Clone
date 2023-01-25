@@ -1,10 +1,5 @@
 #include "candy.h"
 
-int aleat(int lo, int hi)
-{
-    return lo + (rand() % (hi - lo));
-}
-
 CANDY *createCandy()
 {
     CANDY *candy = malloc(sizeof(CANDY));

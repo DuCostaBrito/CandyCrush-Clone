@@ -5,6 +5,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <stdio.h>
 #include <math.h>
+#include "global.h"
 
 //Definindo cores
 #define PIXEL(r,g,b) (al_map_rgb((unsigned char) r, (unsigned char) g, (unsigned char) b))
@@ -16,38 +17,6 @@
 #define BROWN PIXEL(139, 87, 66)
 #define GRAY PIXEL(211, 211, 211)
 #define BLACK PIXEL(0,0,0)
-
-
-
-#define BOARD_ROW 9
-#define BOARD_COL 5
-typedef enum CANDY_TYPE 
-{
-    CT_RED = 0,
-    CT_PURPLE,
-    CT_GREEN,
-    CT_ORANGE,
-    CT_BLUE,
-    CT_BROWN,
-    CT_GRAY,
-    CT_BLACK,
-    CANDY_TYPE_N
-} CANDY_TYPE;
-
-typedef struct CANDY
-{
-    int x, y;
-    int xBoardPos, yBoardPos;
-    CANDY_TYPE type;
-    bool moving;
-    bool match;
-} CANDY;
-
-typedef struct BOARD 
-{
-    int score;
-    CANDY *grid[BOARD_ROW][BOARD_COL];
-} BOARD;
 
 BOARD *createBoard();
 void drawBoard(BOARD *board, ALLEGRO_BITMAP *sprites[19]);

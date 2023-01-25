@@ -6,41 +6,12 @@
 #include <stdio.h>
 #include <time.h>
 #include "candy.h"
-
-#define FPS 60
-#define KEY_SEEN 1
-#define KEY_RELEASED 2
-
-void must_init(bool test, const char *description)
-{
-    if (test)
-        return;
-
-    printf("couldn't initialize %s\n", description);
-    exit(1);
-}
-
-ALLEGRO_BITMAP *sprite_grab(int x, int y, int w, int h, ALLEGRO_BITMAP *spriteSheet)
-{
-    ALLEGRO_BITMAP *sprite = al_create_sub_bitmap(spriteSheet, x, y, w, h);
-    must_init(sprite, "sprite grab");
-    return sprite;
-}
-
-bool within(int top, int bottom, int x)
-{
-    if ((x >= bottom) && (x <= top))
-        return true;
-    else
-        return false;
-}
+#include "global.h"
 
 int main()
 {
     srand(time(0));
-    BOARD *board = createBoard();
-    int width = 570;
-    int height = 1024;
+    board = createBoard();
     int i, j;
     int w = 1;
     bool verified = true;
@@ -48,7 +19,6 @@ int main()
     bool done = false;
     bool redraw = true;
 
-    unsigned char key[ALLEGRO_KEY_MAX];
     memset(key, 0, sizeof(key));
 
     int xMouse, xMouseOrigin, xMouseEnd;
@@ -57,78 +27,9 @@ int main()
     int srcIndexCandyX, srcIndexCandyY;
     int destIndexCandyX, destIndexCandyY;
 
-    ALLEGRO_DISPLAY *display;
-    ALLEGRO_EVENT_QUEUE *queue;
-    ALLEGRO_TIMER *timer;
-
-    ALLEGRO_COLOR color;
-
-    if (!al_init())
-        return -1;
-    al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
-    al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
-
-    display = al_create_display(width, height);
-
-    if (!display)
-        return -1;
-
-    timer = al_create_timer(1.0 / FPS);
-    if (!timer)
-        return -1;
-
-    al_init_primitives_addon();
-    al_init_image_addon();
-    // Declarando mouse e teclado
-    al_install_keyboard();
-    al_install_mouse();
-
-    queue = al_create_event_queue();
-
-    // Deixando a fila atenta aos eventos do teclado e mouse
-    al_register_event_source(queue, al_get_display_event_source(display));
-    al_register_event_source(queue, al_get_keyboard_event_source());
-    al_register_event_source(queue, al_get_mouse_event_source());
-    al_register_event_source(queue, al_get_timer_event_source(timer));
-
-    // getting images
-    ALLEGRO_BITMAP *background = al_load_bitmap("resources/images/background.png");
-    ALLEGRO_BITMAP *spriteSheet = al_load_bitmap("resources/images/candy_fruits.png");
-    ALLEGRO_BITMAP *numberSheet = al_load_bitmap("resources/fonts/candy.png");
-    ALLEGRO_BITMAP *sprites[19];
-    sprites[0] = sprite_grab(149, 372, 38, 43, numberSheet);
-    sprites[1] = sprite_grab(487, 70, 26, 43, numberSheet);
-    sprites[2] = sprite_grab(0, 372, 36, 43, numberSheet);
-    sprites[3] = sprite_grab(36, 372, 38, 43, numberSheet);
-    sprites[4] = sprite_grab(440, 318, 36, 43, numberSheet);
-    sprites[5] = sprite_grab(190, 372, 33, 43, numberSheet);
-    sprites[6] = sprite_grab(76, 372, 35, 44, numberSheet);
-    sprites[7] = sprite_grab(476, 318, 36, 43, numberSheet);
-    sprites[8] = sprite_grab(371, 372, 35, 43, numberSheet);
-    sprites[9] = sprite_grab(112, 373, 36, 43, numberSheet);
-    sprites[10] = sprite_grab(0, 0, 70, 70, spriteSheet);
-    sprites[11] = sprite_grab(70, 0, 70, 70, spriteSheet);
-    sprites[12] = sprite_grab(70, 70, 70, 70, spriteSheet);
-    sprites[13] = sprite_grab(70, 210, 70, 70, spriteSheet);
-    sprites[14] = sprite_grab(140, 70, 70, 70, spriteSheet);
-    sprites[15] = sprite_grab(140, 140, 70, 70, spriteSheet);
-    sprites[16] = sprite_grab(0, 140, 70, 70, spriteSheet);
-    sprites[17] = sprite_grab(140, 0, 70, 70, spriteSheet);
-    sprites[18] = al_load_bitmap("resources/images/background.png");
-    
-    //Audio
-    must_init(al_install_audio(), "audio");
-    must_init(al_init_acodec_addon(), "audio codecs");
-    must_init(al_reserve_samples(16), "reserve samples");
-    ALLEGRO_SAMPLE *sample_bg;
-    ALLEGRO_SAMPLE *sample_mult[5];
-    ALLEGRO_SAMPLE *sample_clear;
-    ALLEGRO_SAMPLE *sample_wrong_play = al_load_sample("resources/sounds/wrong_move.ogg");
-    must_init(sample_wrong_play, "wrong play");
-
+    init();
     ALLEGRO_EVENT ev;
     al_start_timer(timer);
-
     while (verifyMatch(board) || isEmpty(board))
     {
         fallBoard(board, sprites);

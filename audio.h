@@ -9,7 +9,8 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_image.h>
+#include "global.h"
 
-void audio_init(ALLEGRO_SAMPLE *sample_bg, ALLEGRO_SAMPLE *sample_mult[5], ALLEGRO_SAMPLE *sample_clear, ALLEGRO_SAMPLE *sample_wrong_play);
+void audio_init();
 
 #endif
