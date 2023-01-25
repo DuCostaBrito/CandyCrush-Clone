@@ -18,9 +18,9 @@ void must_init(bool test, const char *description)
     exit(1);
 }
 
-ALLEGRO_BITMAP* sprite_grab(int x, int y, int w, int h, ALLEGRO_BITMAP *spriteSheet)
+ALLEGRO_BITMAP *sprite_grab(int x, int y, int w, int h, ALLEGRO_BITMAP *spriteSheet)
 {
-    ALLEGRO_BITMAP* sprite = al_create_sub_bitmap(spriteSheet, x, y, w, h);
+    ALLEGRO_BITMAP *sprite = al_create_sub_bitmap(spriteSheet, x, y, w, h);
     must_init(sprite, "sprite grab");
     return sprite;
 }
@@ -89,8 +89,8 @@ int main()
     al_register_event_source(queue, al_get_mouse_event_source());
     al_register_event_source(queue, al_get_timer_event_source(timer));
 
-    //getting images
-    ALLEGRO_BITMAP  *background = al_load_bitmap("resources/images/background.png");
+    // getting images
+    ALLEGRO_BITMAP *background = al_load_bitmap("resources/images/background.png");
     ALLEGRO_BITMAP *spriteSheet = al_load_bitmap("resources/images/candy_fruits.png");
     ALLEGRO_BITMAP *sprites[8];
     sprites[0] = sprite_grab(0, 0, 70, 70, spriteSheet);
@@ -111,11 +111,13 @@ int main()
         switch (ev.type)
         {
         case ALLEGRO_EVENT_TIMER:
-            if (key[ALLEGRO_KEY_0] && verified){
-                verifyMatch(board);
-                verified = false;
+            if (key[ALLEGRO_KEY_0])
+            {
+                while (verifyMatch(board) || isEmpty(board)){
+                    fallBoard(board, background, sprites);
+                    fillBoard(board, background, sprites);
+                }
             }
-                
             if (key[ALLEGRO_KEY_ESCAPE])
                 done = true;
             for (int i = 0; i < ALLEGRO_KEY_MAX; i++)
@@ -138,9 +140,9 @@ int main()
                         }
                     }
                 }
-                //testando se foi tentado mexer com uma peca adjacente (nao diagonal) 
+                // testando se foi tentado mexer com uma peca adjacente (nao diagonal)
                 if ((((destIndexCandyX == srcIndexCandyX + 1) || (destIndexCandyX == srcIndexCandyX - 1)) && (destIndexCandyY == srcIndexCandyY)) ||
-                (((destIndexCandyY == srcIndexCandyY + 1) || (destIndexCandyY == srcIndexCandyY - 1)) && (destIndexCandyX == srcIndexCandyX)))
+                    (((destIndexCandyY == srcIndexCandyY + 1) || (destIndexCandyY == srcIndexCandyY - 1)) && (destIndexCandyX == srcIndexCandyX)))
                     swipeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY, background, sprites);
                 mousePressed = false;
                 verified = true;
@@ -173,13 +175,10 @@ int main()
         }
         if (done)
             break;
-        while (verifyMatch(board))
-            w++;
-        
         if (redraw && al_is_event_queue_empty(queue))
         {
             // al_draw_filled_rounded_rectangle(50, 150, width - 50, height - 50, 40, 40, al_map_rgba(0, 0, 0, 100));
-            
+
             al_draw_bitmap(background, 0, 0, 0);
             drawBoard(board, sprites);
             al_flip_display(); // Buffer

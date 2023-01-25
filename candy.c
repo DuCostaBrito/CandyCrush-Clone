@@ -224,7 +224,6 @@ bool verifyMatch(BOARD *board)
             }
         }
     // Verificando matchs verticais
-
     for (int i = 0; i < BOARD_ROW - 2; i++)
         for (int j = 0; j < BOARD_COL; j++)
         {
@@ -240,4 +239,51 @@ bool verifyMatch(BOARD *board)
             }
         }
     return match;
+}
+
+void fallBoard(BOARD *board, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8])
+{
+    int i, j;
+    int c = 1;
+    for (i = BOARD_ROW - 1; i > 0; i--)
+        for (j = BOARD_COL - 1; j >= 0; j--)
+        {
+            if (board->grid[i][j]->match)
+            {
+                while (board->grid[i - c][j]->match)
+                {
+                    if (i - c <= 0)
+                        return;
+                    c++;
+                }
+                swipeColors(board, i, j, i - c, j, bg, sprites);
+                board->grid[i][j]->match = false;
+                board->grid[i - c][j]->match = true;
+                c = 1;
+            }
+        }
+    return;
+}
+
+bool isEmpty(BOARD *board) {
+    int i, j;
+    for (i = 0; i < BOARD_ROW; i++)
+        for(j = 0; j < BOARD_COL; j++){
+            if (board->grid[i][j]->match)
+                return true;
+        }
+    return false;
+}
+
+void fillBoard(BOARD *board, ALLEGRO_BITMAP *bg, ALLEGRO_BITMAP *sprites[8]){
+    
+    for (int j = 0; j < BOARD_COL; j++)
+    {
+        if (board->grid[0][j]->match){
+            board->grid[0][j]->type = aleat(0, CANDY_TYPE_N);
+            board->grid[0][j]->match = false;
+        }
+    }
+    fallBoard(board, bg, sprites);
+    return;
 }
