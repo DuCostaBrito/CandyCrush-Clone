@@ -111,7 +111,7 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
             drawSetting();
             showScore(sprites, board);
             al_flip_display();
-            count += 4;
+            count += 6;
         }
     }
     else if (srcIndexX < destIndexX)
@@ -126,7 +126,7 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
             drawSetting();
             showScore(sprites, board);
             al_flip_display();
-            count += 4;
+            count += 6;
         }
     }
     else if (srcIndexY > destIndexY)
@@ -141,7 +141,7 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
             drawSetting();
             showScore(sprites, board);
             al_flip_display();
-            count += 4;
+            count += 6;
         }
     }
     else if (srcIndexX > destIndexX)
@@ -156,7 +156,7 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
             drawSetting();
             showScore(sprites, board);
             al_flip_display();
-            count += 4;
+            count += 6;
         }
     }
     board->grid[srcIndexX][srcIndexY]->moving = false;
