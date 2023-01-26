@@ -79,7 +79,7 @@ int main()
     {
         while (menu)
         {
-            while(!isPossible(board))
+            while (!isPossible(board))
                 shuffleBoard(board);
             ALLEGRO_EVENT ev;
             al_wait_for_event(queue, &ev);
@@ -110,6 +110,7 @@ int main()
                         if (mult >= 5)
                             mult = 5;
                     }
+                    mult = 0;
                 }
                 break;
             }
@@ -174,6 +175,15 @@ int main()
                                 {
                                     shuffleBoard(board);
                                     mousePressed = false;
+                                    while (verifyMatch(board, mult) || isEmpty(board))
+                                    {
+                                        fallBoard(board, sprites);
+                                        fillBoard(board, sprites);
+                                        mult++;
+                                        if (mult >= 5)
+                                            mult = 5;
+                                    }
+                                    mult = 0;
                                 }
                             }
 
@@ -225,6 +235,7 @@ int main()
                     (((destIndexCandyY == srcIndexCandyY + 1) || (destIndexCandyY == srcIndexCandyY - 1)) && (destIndexCandyX == srcIndexCandyX)))
                 {
                     swipeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY, sprites);
+
                     if (!verifyMatch(board, mult))
                     {
                         swipeColors(board, srcIndexCandyX, srcIndexCandyY, destIndexCandyX, destIndexCandyY, sprites);
@@ -295,36 +306,5 @@ int main()
         if (done)
             break;
     }
-    al_destroy_sample(sample_bg);
-    al_destroy_sample(sample_mult[5]);
-    al_destroy_sample(sample_wrong_play);
-    al_destroy_sample(sample_mult[0]);
-    al_destroy_sample(sample_mult[1]);
-    al_destroy_sample(sample_mult[2]);
-    al_destroy_sample(sample_mult[3]);
-    al_destroy_sample(sample_mult[4]);
-
-    al_destroy_bitmap(sprites[0]);
-    al_destroy_bitmap(sprites[1]);
-    al_destroy_bitmap(sprites[2]);
-    al_destroy_bitmap(sprites[3]);
-    al_destroy_bitmap(sprites[4]);
-    al_destroy_bitmap(sprites[5]);
-    al_destroy_bitmap(sprites[6]);
-    al_destroy_bitmap(sprites[7]);
-    al_destroy_bitmap(sprites[8]);
-    al_destroy_bitmap(sprites[9]);
-    al_destroy_bitmap(sprites[10]);
-    al_destroy_bitmap(sprites[11]);
-    al_destroy_bitmap(sprites[12]);
-    al_destroy_bitmap(sprites[13]);
-    al_destroy_bitmap(sprites[14]);
-    al_destroy_bitmap(sprites[15]);
-    al_destroy_bitmap(sprites[16]);
-    al_destroy_bitmap(sprites[17]);
-    al_destroy_bitmap(sprites[18]);
-    al_destroy_display(display);
-    al_destroy_timer(timer);
-    al_destroy_event_queue(queue);
     return 0;
 }

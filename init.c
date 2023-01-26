@@ -1,4 +1,5 @@
 #include "init.h"
+#include "candy.h"
 
 
 void game_init()
@@ -72,4 +73,51 @@ void game_init()
     //Audio
     audio_init();
     return;
+}
+
+void deinit(){
+    al_destroy_sample(sample_bg);
+    al_destroy_sample(sample_mult[5]);
+    al_destroy_sample(sample_wrong_play);
+    al_destroy_sample(sample_mult[0]);
+    al_destroy_sample(sample_mult[1]);
+    al_destroy_sample(sample_mult[2]);
+    al_destroy_sample(sample_mult[3]);
+    al_destroy_sample(sample_mult[4]);
+
+    al_destroy_bitmap(sprites[0]);
+    al_destroy_bitmap(sprites[1]);
+    al_destroy_bitmap(sprites[2]);
+    al_destroy_bitmap(sprites[3]);
+    al_destroy_bitmap(sprites[4]);
+    al_destroy_bitmap(sprites[5]);
+    al_destroy_bitmap(sprites[6]);
+    al_destroy_bitmap(sprites[7]);
+    al_destroy_bitmap(sprites[8]);
+    al_destroy_bitmap(sprites[9]);
+    al_destroy_bitmap(sprites[10]);
+    al_destroy_bitmap(sprites[11]);
+    al_destroy_bitmap(sprites[12]);
+    al_destroy_bitmap(sprites[13]);
+    al_destroy_bitmap(sprites[14]);
+    al_destroy_bitmap(sprites[15]);
+    al_destroy_bitmap(sprites[16]);
+    al_destroy_bitmap(sprites[17]);
+    al_destroy_bitmap(sprites[18]);
+    al_destroy_bitmap(sprites[18]);
+    al_destroy_bitmap(sprites[19]);
+    al_destroy_bitmap(sprites[20]);
+    al_destroy_bitmap(sprites[21]);
+    al_destroy_bitmap(sprites[22]);
+    al_destroy_bitmap(sprites[23]);
+    al_destroy_bitmap(sprites[24]);
+    al_destroy_bitmap(sprites[25]);
+    al_destroy_bitmap(sprites[26]);
+    al_destroy_bitmap(sprites[27]);
+    al_destroy_bitmap(sprites[28]);
+    al_destroy_bitmap(sprites[29]);
+    al_destroy_display(display);
+    al_destroy_timer(timer);
+    al_destroy_event_queue(queue);
+    freeBoard();
 }

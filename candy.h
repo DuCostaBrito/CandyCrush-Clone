@@ -31,5 +31,6 @@ void shuffleBoard(BOARD *board);
 bool isPossible(BOARD *board);
 void showRecord();
 void checkRecord(int score);
+void freeBoard();
 
 #endif

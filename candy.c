@@ -46,6 +46,7 @@ void shuffleBoard(BOARD *board)
             board->grid[i][j]->type = aleat(0, CANDY_TYPE_N);
         }
     }
+    board->score = 0;
     return;
 }
 
@@ -214,6 +215,9 @@ bool isPossible(BOARD *board)
                 return true;
             else if (board->grid[i][j]->type == board->grid[i + 1][j + 2]->type && board->grid[i + 1][j + 1]->type == board->grid[i][j]->type)
                 return true;
+            if (j < BOARD_COL - 3)
+                if (board->grid[i][j]->type == board->grid[i][j+1]->type && board->grid[i][j]->type == board->grid[i][j + 3]->type)
+                    return true;
         }
     // verifica vertical
     for (i = 0; i < BOARD_ROW - 2; i++)
@@ -245,6 +249,9 @@ bool isPossible(BOARD *board)
                 return true;
             else if (board->grid[i][j]->type == board->grid[i + 1][j + 1]->type && board->grid[i + 2][j + 1]->type == board->grid[i][j]->type)
                 return true;
+            if (i < BOARD_ROW - 3)
+                if (board->grid[i][j]->type == board->grid[i + 1][j]->type && board->grid[i][j]->type == board->grid[i + 3][j]->type)
+                    return true;
         }
     return false;
 }
@@ -411,7 +418,7 @@ void fillBoard(BOARD *board, ALLEGRO_BITMAP *sprites[N_SPRITES])
 
 void showScore(BOARD *board)
 {
-    int total, uni, dez, cen, mil, dez_mil;
+    int total, uni, dez, cen, mil, dez_mil, cem_mil;
     total = board->score;
     uni = total % 10;
     total = floor(total / 10);
@@ -421,21 +428,26 @@ void showScore(BOARD *board)
     total = floor(total / 10);
     mil = total % 10;
     total = floor(total / 10);
-    dez_mil = total;
+    dez_mil = total%10;
+    total = floor(total / 10);
+    cem_mil = total;
 
-    al_draw_bitmap(sprites[dez_mil], 26, 80, 0);
-    al_draw_bitmap(sprites[mil], 56, 80, 0);
-    al_draw_bitmap(sprites[cen], 86, 80, 0);
-    al_draw_bitmap(sprites[dez], 116, 80, 0);
-    al_draw_bitmap(sprites[uni], 146, 80, 0);
+    al_draw_bitmap(sprites[cem_mil], 26, 80, 0);
+    al_draw_bitmap(sprites[dez_mil], 56, 80, 0);
+    al_draw_bitmap(sprites[mil], 86, 80, 0);
+    al_draw_bitmap(sprites[cen], 116, 80, 0);
+    al_draw_bitmap(sprites[dez], 146, 80, 0);
+    al_draw_bitmap(sprites[uni], 176, 80, 0);
     return;
 }
 
-void checkRecord(int score){
+void checkRecord(int score)
+{
     int aux;
-    FILE* file = fopen(".recorde", "r+");
+    FILE *file = fopen(".recorde", "r+");
     fscanf(file, "%d", &aux);
-    if(score > aux || score > 20000){
+    if (score > aux || score > 20000)
+    {
         fseek(file, 0, SEEK_SET);
         fprintf(file, "%d", score);
     }
@@ -443,25 +455,37 @@ void checkRecord(int score){
     return;
 }
 
-void showRecord(){
-    FILE* file = fopen(".recorde", "r");
-    int total, uni, dez, cen, mil, dez_mil;
+void showRecord()
+{
+    FILE *file = fopen(".recorde", "r");
+    int total, uni, dez, cem, mil, dez_mil, cem_mil;
     fscanf(file, "%d", &total);
     uni = total % 10;
     total = floor(total / 10);
     dez = total % 10;
     total = floor(total / 10);
-    cen = total % 10;
+    cem = total % 10;
     total = floor(total / 10);
     mil = total % 10;
     total = floor(total / 10);
-    dez_mil = total;
+    dez_mil = total % 10;
+    total = floor(total / 10);
+    cem_mil = total;
 
-    al_draw_bitmap(sprites[dez_mil], WIDTH / 2 - 80, HEIGHT / 2 + 10, 0);
-    al_draw_bitmap(sprites[mil], WIDTH / 2 - 50, HEIGHT / 2 + 10, 0);
-    al_draw_bitmap(sprites[cen], WIDTH / 2 - 20, HEIGHT / 2 + 10, 0);
-    al_draw_bitmap(sprites[dez], WIDTH / 2 + 10, HEIGHT / 2 + 10, 0);
-    al_draw_bitmap(sprites[uni], WIDTH / 2 + 40, HEIGHT / 2 + 10, 0);
+    al_draw_bitmap(sprites[cem_mil], WIDTH / 2 - 93, HEIGHT / 2 + 10, 0);
+    al_draw_bitmap(sprites[dez_mil], WIDTH / 2 - 63, HEIGHT / 2 + 10, 0);
+    al_draw_bitmap(sprites[mil], WIDTH / 2 - 33, HEIGHT / 2 + 10, 0);
+    al_draw_bitmap(sprites[cem], WIDTH / 2 - 3, HEIGHT / 2 + 10, 0);
+    al_draw_bitmap(sprites[dez], WIDTH / 2 + 27, HEIGHT / 2 + 10, 0);
+    al_draw_bitmap(sprites[uni], WIDTH / 2 + 57, HEIGHT / 2 + 10, 0);
 
     fclose(file);
+}
+
+void freeBoard()
+{
+    for (int i = 0; i < BOARD_ROW; i++)
+        for (int j = 0; j < BOARD_COL; j++)
+            free(board->grid[i][j]);
+    free(board);
 }
