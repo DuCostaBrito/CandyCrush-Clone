@@ -8,7 +8,7 @@
 // ----------- VARIAVEIS --------- //
 #define WIDTH 570
 #define HEIGHT 1024
-#define N_SPRITES 26
+#define N_SPRITES 30
 #define FPS 60
 #define BOARD_ROW 9
 #define BOARD_COL 5

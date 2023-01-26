@@ -60,6 +60,14 @@ void game_init()
     must_init(sprites[24], "24");
     sprites[25] = al_load_bitmap("resources/images/gui_settings_on.png");
     must_init(sprites[25], "25");
+    sprites[26] = al_load_bitmap("resources/images/play.png");
+    must_init(sprites[26], "26");
+    sprites[27] = al_load_bitmap("resources/images/logo.png");
+    must_init(sprites[27], "27");
+    sprites[28] = al_load_bitmap("resources/images/button.9.png");
+    must_init(sprites[28], "28");
+    sprites[29] = al_load_bitmap("resources/images/leaderboard.png");
+    must_init(sprites[29], "29");
     
     //Audio
     audio_init();

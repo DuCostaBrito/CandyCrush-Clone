@@ -56,7 +56,7 @@ int main()
     board = createBoard();
     int i, j;
     int mult = 0;
-    bool verified = true;
+    bool menu = true;
 
     bool done = false;
     bool redraw = true;
@@ -73,21 +73,59 @@ int main()
     bg_instance = al_create_sample_instance(sample_bg);
     al_set_sample_instance_playmode(bg_instance, ALLEGRO_PLAYMODE_LOOP);
     al_attach_sample_instance_to_mixer(bg_instance, al_get_default_mixer());
-    ALLEGRO_EVENT ev;
+
     al_start_timer(timer);
-    while (verifyMatch(board, mult) || isEmpty(board))
-    {
-        fallBoard(board, sprites);
-        fillBoard(board, sprites);
-        mult++;
-        if (mult >= 5)
-            mult = 5;
-    }
-    while(!isPossible(board))
-        shuffleBoard(board);
-    mult = 0;
     while (1)
     {
+        while (menu)
+        {
+            while(!isPossible(board))
+                shuffleBoard(board);
+            ALLEGRO_EVENT ev;
+            al_wait_for_event(queue, &ev);
+
+            switch (ev.type)
+            {
+            case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                menu = false;
+                done = true;
+                break;
+            case ALLEGRO_EVENT_KEY_UP:
+                if (ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
+                {
+                    menu = false;
+                    done = true;
+                }
+
+                break;
+            case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+                if (within(WIDTH / 2 - 140 + 240, WIDTH / 2 - 120, ev.mouse.x) && within(HEIGHT / 2 - 200 + 200, HEIGHT / 2 - 100, ev.mouse.y))
+                {
+                    menu = false;
+                    while (verifyMatch(board, mult) || isEmpty(board))
+                    {
+                        fallBoard(board, sprites);
+                        fillBoard(board, sprites);
+                        mult++;
+                        if (mult >= 5)
+                            mult = 5;
+                    }
+                }
+                break;
+            }
+            redraw = true;
+            if (redraw && al_is_event_queue_empty(queue))
+            {
+                al_clear_to_color(PIXEL(222, 49, 99));
+                al_draw_bitmap(sprites[26], WIDTH / 2 - 140, HEIGHT / 2 - 200, 0);
+                al_draw_bitmap(sprites[29], WIDTH / 2 - 70, HEIGHT / 2 + 10, 0);
+                al_draw_bitmap(sprites[27], WIDTH / 2 - 140, 50, 0);
+                al_flip_display(); // Buffer
+                redraw = false;
+            }
+        }
+        ALLEGRO_EVENT ev;
+
         al_wait_for_event(queue, &ev);
 
         switch (ev.type)
@@ -242,13 +280,14 @@ int main()
             redraw = false;
             if (!isPossible(board))
             {
-                done = true;
                 char score[100];
                 strcpy(score, "Seu score final foi: ");
                 char snum[10];
                 itoa(board->score, snum, 10);
                 strcat(score, snum);
                 al_show_native_message_box(display, "MATCH3", "FIM DE JOGO", score, NULL, 0);
+                menu = true;
+                board->score = 0;
             }
         }
         if (done)
