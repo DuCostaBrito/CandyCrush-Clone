@@ -109,7 +109,7 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
             drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x - count, board->grid[destIndexX][destIndexY]->y, sprites);
             drawBoard(board, sprites);
             drawSetting();
-            showScore(sprites, board);
+            showScore(board);
             al_flip_display();
             count += 6;
         }
@@ -124,7 +124,7 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
             drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x, board->grid[destIndexX][destIndexY]->y - count, sprites);
             drawBoard(board, sprites);
             drawSetting();
-            showScore(sprites, board);
+            showScore(board);
             al_flip_display();
             count += 6;
         }
@@ -139,7 +139,7 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
             drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x + count, board->grid[destIndexX][destIndexY]->y, sprites);
             drawBoard(board, sprites);
             drawSetting();
-            showScore(sprites, board);
+            showScore(board);
             al_flip_display();
             count += 6;
         }
@@ -154,7 +154,7 @@ void swipeColors(BOARD *board, int srcIndexX, int srcIndexY, int destIndexX, int
             drawCandy(board->grid[destIndexX][destIndexY], board->grid[destIndexX][destIndexY]->x, board->grid[destIndexX][destIndexY]->y + count, sprites);
             drawBoard(board, sprites);
             drawSetting();
-            showScore(sprites, board);
+            showScore(board);
             al_flip_display();
             count += 6;
         }
@@ -173,7 +173,7 @@ void showMult(int mult)
     {
         al_draw_bitmap(sprites[18], 0, 0, 0);
         drawBoard(board, sprites);
-        showScore(sprites, board);
+        showScore(board);
         drawSetting();
         al_draw_bitmap(sprites[mult], 180 + count, 100 - count, 0);
         al_flip_display();
@@ -409,7 +409,7 @@ void fillBoard(BOARD *board, ALLEGRO_BITMAP *sprites[N_SPRITES])
     return;
 }
 
-void showScore(ALLEGRO_BITMAP *numbers[N_SPRITES], BOARD *board)
+void showScore(BOARD *board)
 {
     int total, uni, dez, cen, mil, dez_mil;
     total = board->score;
@@ -423,10 +423,45 @@ void showScore(ALLEGRO_BITMAP *numbers[N_SPRITES], BOARD *board)
     total = floor(total / 10);
     dez_mil = total;
 
-    al_draw_bitmap(numbers[dez_mil], 26, 80, 0);
-    al_draw_bitmap(numbers[mil], 56, 80, 0);
-    al_draw_bitmap(numbers[cen], 86, 80, 0);
-    al_draw_bitmap(numbers[dez], 116, 80, 0);
-    al_draw_bitmap(numbers[uni], 146, 80, 0);
+    al_draw_bitmap(sprites[dez_mil], 26, 80, 0);
+    al_draw_bitmap(sprites[mil], 56, 80, 0);
+    al_draw_bitmap(sprites[cen], 86, 80, 0);
+    al_draw_bitmap(sprites[dez], 116, 80, 0);
+    al_draw_bitmap(sprites[uni], 146, 80, 0);
     return;
+}
+
+void checkRecord(int score){
+    int aux;
+    FILE* file = fopen(".recorde", "r+");
+    fscanf(file, "%d", &aux);
+    if(score > aux || score > 20000){
+        fseek(file, 0, SEEK_SET);
+        fprintf(file, "%d", score);
+    }
+    fclose(file);
+    return;
+}
+
+void showRecord(){
+    FILE* file = fopen(".recorde", "r");
+    int total, uni, dez, cen, mil, dez_mil;
+    fscanf(file, "%d", &total);
+    uni = total % 10;
+    total = floor(total / 10);
+    dez = total % 10;
+    total = floor(total / 10);
+    cen = total % 10;
+    total = floor(total / 10);
+    mil = total % 10;
+    total = floor(total / 10);
+    dez_mil = total;
+
+    al_draw_bitmap(sprites[dez_mil], WIDTH / 2 - 80, HEIGHT / 2 + 10, 0);
+    al_draw_bitmap(sprites[mil], WIDTH / 2 - 50, HEIGHT / 2 + 10, 0);
+    al_draw_bitmap(sprites[cen], WIDTH / 2 - 20, HEIGHT / 2 + 10, 0);
+    al_draw_bitmap(sprites[dez], WIDTH / 2 + 10, HEIGHT / 2 + 10, 0);
+    al_draw_bitmap(sprites[uni], WIDTH / 2 + 40, HEIGHT / 2 + 10, 0);
+
+    fclose(file);
 }

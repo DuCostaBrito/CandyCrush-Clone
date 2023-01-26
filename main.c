@@ -118,8 +118,9 @@ int main()
             {
                 al_clear_to_color(PIXEL(222, 49, 99));
                 al_draw_bitmap(sprites[26], WIDTH / 2 - 140, HEIGHT / 2 - 200, 0);
-                al_draw_bitmap(sprites[29], WIDTH / 2 - 70, HEIGHT / 2 + 10, 0);
+                al_draw_bitmap(sprites[29], WIDTH / 2 - 70, HEIGHT / 2 + 30, 0);
                 al_draw_bitmap(sprites[27], WIDTH / 2 - 140, 50, 0);
+                showRecord();
                 al_flip_display(); // Buffer
                 redraw = false;
             }
@@ -195,7 +196,7 @@ int main()
                         if (redraw && al_is_event_queue_empty(queue))
                         {
                             al_draw_bitmap(sprites[18], 0, 0, 0);
-                            showScore(sprites, board);
+                            showScore(board);
                             drawBoard(board, sprites);
                             drawMenu();
                             al_flip_display(); // Buffer
@@ -273,7 +274,7 @@ int main()
         if (redraw && al_is_event_queue_empty(queue))
         {
             al_draw_bitmap(sprites[18], 0, 0, 0);
-            showScore(sprites, board);
+            showScore(board);
             drawBoard(board, sprites);
             drawSetting();
             al_flip_display(); // Buffer
@@ -287,6 +288,7 @@ int main()
                 strcat(score, snum);
                 al_show_native_message_box(display, "MATCH3", "FIM DE JOGO", score, NULL, 0);
                 menu = true;
+                checkRecord(board->score);
                 board->score = 0;
             }
         }

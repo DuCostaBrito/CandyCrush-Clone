@@ -26,8 +26,10 @@ bool verifyMatch(BOARD *board, int mult);
 void fallBoard(BOARD *board, ALLEGRO_BITMAP *sprites[N_SPRITES]);
 bool isEmpty(BOARD *board);
 void  fillBoard(BOARD *board, ALLEGRO_BITMAP *sprites[N_SPRITES]);
-void showScore(ALLEGRO_BITMAP *numbers[10], BOARD *board);
+void showScore(BOARD *board);
 void shuffleBoard(BOARD *board);
 bool isPossible(BOARD *board);
+void showRecord();
+void checkRecord(int score);
 
 #endif
