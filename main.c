@@ -153,6 +153,16 @@ int main()
                         al_wait_for_event(queue, &ev);
                         switch (ev.type)
                         {
+                        case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                            setting_on = false;
+                            done = true;
+                            break;
+                        case ALLEGRO_EVENT_KEY_UP:
+                            if (ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
+                            {
+                                setting_on = false;
+                                done = true;
+                            }
                         case ALLEGRO_EVENT_TIMER:
                             if (mousePressed)
                             {
@@ -186,7 +196,6 @@ int main()
                                     mult = 0;
                                 }
                             }
-
                         case ALLEGRO_EVENT_MOUSE_AXES:
                             xMouse = ev.mouse.x;
                             yMouse = ev.mouse.y;
