@@ -1,6 +1,7 @@
 .vscode
 audio.o
 global.o
+candy.o
 init.o
 main.o
 menu.o
