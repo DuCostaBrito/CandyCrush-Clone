@@ -216,7 +216,7 @@ bool isPossible(BOARD *board)
             else if (board->grid[i][j]->type == board->grid[i + 1][j + 2]->type && board->grid[i + 1][j + 1]->type == board->grid[i][j]->type)
                 return true;
             if (j < BOARD_COL - 3)
-                if (board->grid[i][j]->type == board->grid[i][j+1]->type && board->grid[i][j]->type == board->grid[i][j + 3]->type)
+                if (board->grid[i][j]->type == board->grid[i][j + 1]->type && board->grid[i][j]->type == board->grid[i][j + 3]->type)
                     return true;
         }
     // verifica vertical
@@ -258,111 +258,54 @@ bool isPossible(BOARD *board)
 
 bool verifyMatch(BOARD *board, int mult)
 {
-    bool match = false;
     int i, j;
-    int count = 0;
+    int count;
     enum CANDY_TYPE ct;
-    // Verificando matchs horizontais
-    for (int i = 0; i < BOARD_ROW; i++)
-    {
-        if (board->grid[i][0]->type == board->grid[i][1]->type &&
-            board->grid[i][0]->type == board->grid[i][2]->type &&
-            board->grid[i][0]->type == board->grid[i][3]->type &&
-            board->grid[i][0]->type == board->grid[i][4]->type &&
-            !board->grid[i][0]->match)
+    for (i = 0; i < BOARD_ROW; i++)
+        for (j = 0; j < BOARD_COL; j++)
         {
-            board->grid[i][0]->match = true;
-            board->grid[i][1]->match = true;
-            board->grid[i][2]->match = true;
-            board->grid[i][3]->match = true;
-            board->grid[i][4]->match = true;
-            board->score = board->score + ((mult + 1) * 500);
-            showMult(mult + 1);
-            if (sound_on)
-                al_play_sample(sample_mult[mult], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-            match = true;
-            return match;
-        }
-    }
-
-    for (int i = 0; i < BOARD_ROW; i++)
-        for (int j = 0; j < BOARD_COL - 3; j++)
-        {
-            if (board->grid[i][j]->type == board->grid[i][j + 1]->type &&
-                board->grid[i][j]->type == board->grid[i][j + 2]->type &&
-                board->grid[i][j]->type == board->grid[i][j + 3]->type &&
-                !board->grid[i][j]->match)
+            count = 1;
+            if (!board->grid[i][j]->match)
             {
-                board->grid[i][j]->match = true;
-                board->grid[i][j + 1]->match = true;
-                board->grid[i][j + 2]->match = true;
-                board->grid[i][j + 3]->match = true;
-                board->score = board->score + ((mult + 1) * 400);
-                showMult(mult + 1);
-                if (sound_on)
-                    al_play_sample(sample_mult[mult], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-                match = true;
-                return match;
+                while ((j + count < BOARD_COL) && (board->grid[i][j]->type == board->grid[i][j + count]->type) && (!board->grid[i][j + count]->match))
+                {
+                    count++;
+                }
+                if (count >= 3)
+                {
+                    board->score = board->score + ((mult + 1) * count * 100);
+                    count--;
+                    for (count; count >= 0; count--)
+                    {
+                        board->grid[i][j + count]->match = true;
+                    }
+                    showMult(mult + 1);
+                    if (sound_on)
+                        al_play_sample(sample_mult[mult], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                    return true;
+                }
+                count = 1;
+                while ((i + count < BOARD_ROW) && (board->grid[i][j]->type == board->grid[i + count][j]->type) && (!board->grid[i + count][j]->match))
+                {
+                    count++;
+                }
+                if (count >= 3)
+                {
+                    board->score = board->score + ((mult + 1) * count * 100);
+                    count--;
+                    for (count; count >= 0; count--)
+                    {
+                        board->grid[i  + count][j]->match = true;
+                    }
+                    showMult(mult + 1);
+                    if (sound_on)
+                        al_play_sample(sample_mult[mult], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                    return true;
+                }
             }
+            
         }
-    for (int i = 0; i < BOARD_ROW - 3; i++)
-        for (int j = 0; j < BOARD_COL; j++)
-        {
-            if (board->grid[i][j]->type == board->grid[i + 1][j]->type &&
-                board->grid[i][j]->type == board->grid[i + 2][j]->type &&
-                board->grid[i][j]->type == board->grid[i + 3][j]->type &&
-                !board->grid[i][j]->match)
-            {
-                board->grid[i][j]->match = true;
-                board->grid[i + 1][j]->match = true;
-                board->grid[i + 2][j]->match = true;
-                board->grid[i + 3][j]->match = true;
-                board->score = board->score + ((mult + 1) * 400);
-                showMult(mult + 1);
-                if (sound_on)
-                    al_play_sample(sample_mult[mult], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-                match = true;
-                return match;
-            }
-        }
-    for (int i = 0; i < BOARD_ROW; i++)
-        for (int j = 0; j < BOARD_COL - 2; j++)
-        {
-            if (board->grid[i][j]->type == board->grid[i][j + 1]->type &&
-                board->grid[i][j]->type == board->grid[i][j + 2]->type &&
-                !board->grid[i][j]->match)
-            {
-                board->grid[i][j]->match = true;
-                board->grid[i][j + 1]->match = true;
-                board->grid[i][j + 2]->match = true;
-                board->score = board->score + ((mult + 1) * 300);
-                showMult(mult + 1);
-                if (sound_on)
-                    al_play_sample(sample_mult[mult], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-                match = true;
-                return match;
-            }
-        }
-    // Verificando matchs verticais
-    for (int i = 0; i < BOARD_ROW - 2; i++)
-        for (int j = 0; j < BOARD_COL; j++)
-        {
-            if (board->grid[i][j]->type == board->grid[i + 1][j]->type &&
-                board->grid[i][j]->type == board->grid[i + 2][j]->type &&
-                !board->grid[i][j]->match)
-            {
-                board->grid[i][j]->match = true;
-                board->grid[i + 1][j]->match = true;
-                board->grid[i + 2][j]->match = true;
-                board->score = board->score + ((mult + 1) * 300);
-                showMult(mult + 1);
-                if (sound_on)
-                    al_play_sample(sample_mult[mult], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-                match = true;
-                return match;
-            }
-        }
-    return match;
+    return false;
 }
 
 void fallBoard(BOARD *board, ALLEGRO_BITMAP *sprites[N_SPRITES])
@@ -428,7 +371,7 @@ void showScore(BOARD *board)
     total = floor(total / 10);
     mil = total % 10;
     total = floor(total / 10);
-    dez_mil = total%10;
+    dez_mil = total % 10;
     total = floor(total / 10);
     cem_mil = total;
 
