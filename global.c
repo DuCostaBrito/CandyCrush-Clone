@@ -3,6 +3,7 @@
 #include "global.h"
 
 // ---------------------------- VARIAVEIS GLOBAIS ------------------------- //
+STATE               state;
 BOARD               *board;
 unsigned char       key[ALLEGRO_KEY_MAX];
 bool setting_on = false;

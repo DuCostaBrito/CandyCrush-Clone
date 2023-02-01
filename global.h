@@ -16,6 +16,9 @@
 #define KEY_RELEASED 2
 
 // ---------------------------- TIPOS DE DADOS ---------------------------- //
+
+typedef enum STATE {FIM, INICIO, MENU, JOGANDO} STATE;
+
 typedef enum CANDY_TYPE 
 {
     CT_RED = 0,
@@ -45,6 +48,7 @@ typedef struct BOARD
 } BOARD;
 
 // ---------------------------- VARIAVEIS GLOBAIS ------------------------- //
+extern STATE               state;
 extern BOARD               *board;
 extern unsigned char       key[ALLEGRO_KEY_MAX];
 extern bool setting_on;

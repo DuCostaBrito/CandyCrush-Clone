@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "allegro_image.h": "c"
+        "allegro_image.h": "c",
+        "stdio.h": "c",
+        "allegro_native_dialog.h": "c",
+        "init.h": "c"
     }
 }

@@ -12,5 +12,5 @@
 #include "audio.h"
 
 void game_init();
-
+void deinit();
 #endif
