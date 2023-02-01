@@ -73,6 +73,10 @@ void state_menu()
         case ALLEGRO_EVENT_KEY_UP:
             if (ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
                 done = true;
+            if (ev.keyboard.keycode == ALLEGRO_KEY_H)
+                al_show_native_message_box(display, "MATCH3", "INFORMACOES", "Jogo estilo match3 desenvolvido na linguagem C e utilizando a biblioteca grafica ALLEGRO5\n Desenvolvido por Eduardo Costa Brito.", NULL, 0);
+            if (ev.keyboard.keycode == ALLEGRO_KEY_F1)
+                al_show_native_message_box(display, "MATCH3", "INSTRUCOES", "Jogo estilo match3 (Para ganhar pontos precisa formar no minimo trios do mesmo doce). \nPara mover um doce, basta clicar no doce escolhido e soltar na direcao que desejar mover.\n Para desligar a musica, sons de efeitos ou embaralhar o tabuleiro, clicar na ferramenta (canto direito superior) e desligar ou ligar o que desejar.\n O jogo termina quando nao ha mais jogadas possiveis", NULL, 0);
             break;
         case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
             if (within(WIDTH / 2 - 140 + 240, WIDTH / 2 - 120, ev.mouse.x) && within(HEIGHT / 2 - 200 + 200, HEIGHT / 2 - 100, ev.mouse.y))
@@ -276,6 +280,11 @@ void state_play()
             break;
         case ALLEGRO_EVENT_KEY_UP:
             key[ev.keyboard.keycode] &= KEY_RELEASED;
+            if (ev.keyboard.keycode == ALLEGRO_KEY_H)
+                al_show_native_message_box(display, "MATCH3", "INFORMACOES", "Jogo estilo match3 desenvolvido na linguagem C e utilizando a biblioteca grafica ALLEGRO5\n Desenvolvido por Eduardo Costa Brito.", NULL, 0);
+            if (ev.keyboard.keycode == ALLEGRO_KEY_F1)
+                al_show_native_message_box(display, "MATCH3", "INSTRUCOES", "Jogo estilo match3 (Para ganhar pontos precisa formar no minimo trios do mesmo doce). \nPara mover um doce, basta clicar no doce escolhido e soltar na direcao que desejar mover.\n Para desligar a musica, sons de efeitos ou embaralhar o tabuleiro, clicar na ferramenta (canto direito superior) e desligar ou ligar o que desejar.\n O jogo termina quando nao ha mais jogadas possiveis", NULL, 0);
+            break;
             break;
         case ALLEGRO_EVENT_MOUSE_AXES:
             xMouse = ev.mouse.x;
@@ -329,6 +338,7 @@ void state_play()
     }
 }
 
-void state_fim(){
+void state_fim()
+{
     deinit();
 }
